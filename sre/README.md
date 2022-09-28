@@ -1,4 +1,4 @@
-# Recruitment assignment for Site Reliability Engineer
+# Recruitment assignment for Site Reliability Engineers
 
 This task is intended for candidates applying for an SRE position at the Visma 
 e-conomic Site Reliability Engineering team. This assignment is built around some of the 
@@ -10,7 +10,7 @@ and serve as a entrypoint for a good discussion at the technical interview.
 
 ## Introduction
 
-e-conomic runs a broad palette of services to the functionality our customers need.
+e-conomic runs a broad palette of services to provide the functionality our customers need.
 A part of this functionality is provided by a layer of microservices. 
 These microservices are hosted in Kubernetes and have different requirements in 
 terms of availability and resilience, both from the requests they serve but also
