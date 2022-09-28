@@ -26,7 +26,7 @@ to do so. We will enjoy discussing your reasoning for doing so.
 
 ## Objectives of the SRE team
 
-* Improve the reliability of the system
+* Improve the reliability of the system.
 * Empower product teams to deliver and operate software efficiently and reliably, 
 by providing tools, advice and assistance. 
 
@@ -85,8 +85,8 @@ deliver your solution there.
 We will invite you to a technical interview where the solution will 
 be the basis of our discussion. You will have to share your screen,
 walk us through the solution and highlight what you'd like to improve. 
-Moreover, we'd like to see a demo; provision infra, run the ci/cd pipeline, 
-run the service and see the metrics/logs
+Moreover, we'd like to see a demo; provision infra, run the CI/CD pipeline, 
+run the service and see the metrics/logs.
 
 ## Questions?
 If you have questions about the task or would like us to further specify some of
