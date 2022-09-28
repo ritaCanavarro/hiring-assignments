@@ -1,18 +1,17 @@
 # Recruitment assignment for Site Reliability Engineer
 
 This task is intended for candidates applying for an SRE position at the Visma 
-e-conomic operations team. This assignment is built around some of the 
+e-conomic Site Reliability Engineering team. This assignment is built around some of the 
 technologies used in our production environment.
 
-We're super happy that you're considering to join us here at e-conomic, the 
-challenge below should hope to bring a small view into the life of an SRE here, 
+We're super happy that you're considering to join us at e-conomic. The 
+challenge below should hope to bring a small view into the life of an SRE, 
 and serve as a entrypoint for a good discussion at the technical interview.
 
 ## Introduction
 
-e-conomic runs a broad palette of services to provide the functionality our 
-application serves our customers, a big part of this functionality is provided 
-by a layer of microservices.
+e-conomic runs a broad palette of services to the functionality our customers need.
+A part of this functionality is provided by a layer of microservices. 
 These microservices are hosted in Kubernetes and have different requirements in 
 terms of availability and resilience, both from the requests they serve but also
 the data that some of them hold.
@@ -22,37 +21,70 @@ daily basis.
 Should you feel like expanding above and beyond the scope of the test, feel free
 to do so. We will enjoy discussing your reasoning for doing so.
 
-## The Challenge
+## Objectives of the SRE team
 
-Develop a microservice that:
+* Improve the reliability of the system
+* Empower product teams to deliver and operate software efficiently and reliably, 
+by providing tools, advice and assistance. 
 
-* Takes HTTP GET requests with a random ID (/1, /529852, etc.), requests a 
+## The Assignment
+
+1. Develop a microservice.
+	1. It takes HTTP GET requests with a random ID (/1, /529852, etc.), requests a 
   document from the microservice we have provided in the `dummy-pdf-or-png` 
   subdirectory of this repository, and then returns the document with correct 
-  ime-type.
-* Provides an endpoint for health monitoring.
-* Has a Kubernetes Manifest or Helm Charts
-* Has Readiness and LivenessChecks.
-* Has a Dockerfile.
-* Has tests, so regressions can be identified.
-* Failing Safe is a priority.
-* The service should log relevant information
+  mime-type.
+	1. Provides an endpoint for health monitoring.
+	1. Has tests, so regressions can be identified.
+	1. Fails safe.
+	1. Logs relevant info.
+	1. Exposes prometheus metrics.
 
-Overall the service must be considered production-ready.
 
-Bonus points if  
 
-* Prometheus metrics are provided from the service.
-* Resources are provisioned via IaC
-* There is CI/CD (GitLab, GitHub Actions or similar) to build, test and deploy
-* There is a good developer experience
+1. Provision the infrastructure.
+	1. Use IaC.
+	1. Provision resources needed to run the services.
+	1. Provision resources needed to view the logs and metrics of the service.
 
-## Delivery
+
+
+1. Package and deploy the  service. 
+	1. Provide a docker file and containerize the service. 
+	1. Setup a CI/CD pipeline for the service. It should build the service, 
+	run the tests and deploy it.
+	1. Provide a k8s manifest or use helm charts.
+
+
+1. Consider the developer experience.
+
+## Important notes
+
+_"Wow, this is a lot!"_
+We realize that not everyone is well skilled in all these technologies. 
+Pick the parts you're the best at and focus on those. Show us your strengths! 
+And most importantly, communicate that to us, so we can adjust our expectations accordingly.
+
+_"Develop a service?"_
+Developing the service is not the most important part of the assignment. 
+You're not interviewing for a developer position. Feel free to use any language
+and bootstrap framework you're most comfortable with.
+
+_"Does it need to be production ready?"_
+We'd very much like that! But, we also want to respect your time. So, be prepared
+to tell us what you'd improve, should you have to deploy this into prod. 
+
+## Delivery and Interview
 
 Fork this repository into a public repository on your own Github profile, and 
 deliver your solution there.
 
-## Questions?
+We will invite you to a technical interview where the solution will 
+be the basis of our discussion. You will have to share your screen,
+walk us through the solution and highlight what you'd like to improve. 
+Moreover, we'd like to see a demo; provision infra, run the ci/cd pipeline, 
+run the service and see the metrics/logs
 
+## Questions?
 If you have questions about the task or would like us to further specify some of
 the tings written above, you can contact the person who gave you the assignment.
