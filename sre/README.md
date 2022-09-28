@@ -12,12 +12,15 @@ and serve as a entrypoint for a good discussion at the technical interview.
 
 e-conomic runs a broad palette of services to provide the functionality our customers need.
 A part of this functionality is provided by a layer of microservices. 
+
 These microservices are hosted in Kubernetes and have different requirements in 
 terms of availability and resilience, both from the requests they serve but also
 the data that some of them hold.
-To verify how well a given candidate fit our needs, the test is built with the 
-intention for you to show of your skills in some of the technologies we use on a
+
+To verify how well a candidate fit our needs, the test is built with the 
+intention for you to show off your skills and strengths in some technologies we use on a
 daily basis.  
+
 Should you feel like expanding above and beyond the scope of the test, feel free
 to do so. We will enjoy discussing your reasoning for doing so.
 
