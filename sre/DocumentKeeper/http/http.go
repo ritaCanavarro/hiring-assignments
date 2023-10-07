@@ -41,7 +41,7 @@ func NewHttpServer(port int) (*http.Server, error) {
 	router.HandleFunc("/document/{id}", api.GetDocument).Methods("GET")
 
 	server := &http.Server{
-		Addr:     fmt.Sprintf("127.0.0.1:%d", port),
+		Addr:     fmt.Sprintf(":%d", port),
 		Handler:  router,
 		ErrorLog: &log.Logger{},
 	}
