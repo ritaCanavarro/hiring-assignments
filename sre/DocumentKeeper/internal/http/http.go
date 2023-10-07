@@ -55,9 +55,6 @@ func NewHttpServer(port string) (*http.Server, error){
 		rw.Write(jsonResp)
 	})
 
-	// TODO: Import Document fetcher API GET func
-	mux.Handle("/document/",func(rw http.ResponseWriter, _ *http.Request){})
-
 	server := &http.Server{
 		Addr: fmt.Sprintf(":%v", port),
 		Handler: mux,

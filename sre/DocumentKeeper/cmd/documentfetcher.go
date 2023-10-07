@@ -7,10 +7,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/hiring-assignments/sre/DocumentKeeper/internal/command"
+	"github.com/ritaCanavarro/hiring-assignments/sre/DocumentKeeper/internal/api"
 )
-
-var documentFetcherFlags = &command.documentFetcherFlags{}
 
 var documentfetcherCmd = &cobra.Command{
 	Use: "documentfetcher",
