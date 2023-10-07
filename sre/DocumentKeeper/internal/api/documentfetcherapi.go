@@ -3,19 +3,113 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	"github.com/sirupsen/logrus"
 )
 
-// -------------------- Structures ----------------------
+// -------------------- Global Vars & Const -----------------------
+
+const serverPort = 3000
+
+var router = mux.NewRouter()
+
+// -------------------- Auxiliar Functions -----------------------
+
+func processIdentifier(params map[string]string) int {
+	id, err := strconv.Atoi(params["id"])
+
+	if err != nil {
+		logrus.Errorf("Identifier is not a valid integer %v", err)
+		return -1
+	}
+
+	if id < 0 {
+		logrus.Errorf("Identifier is not a positive integer %v", err)
+		return -1
+	}
+
+	return id
+}
+
+func configureHttpResponse(rw http.ResponseWriter, statusCode int, msg string) {
+	rw.WriteHeader(statusCode)
+	rw.Header().Set("Content-Type", "application/json")
+	resp := map[string]string{
+		"message": msg,
+	}
+
+	jsonResp, err := json.Marshal(resp)
+
+	if err != nil {
+		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
+	}
+
+	rw.Write(jsonResp)
+}
 
 // -------------------- Functions -----------------------
+
+func GetDocument(rw http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := processIdentifier(params)
+
+	if id == -1 {
+		configureHttpResponse(rw, http.StatusBadRequest, "Bad request because ID was not a valid positive integer.")
+		return
+	}
+
+	requestURL := fmt.Sprintf("http://localhost:%d", serverPort)
+	resp, err := http.Get(requestURL)
+
+	if err != nil {
+		logrus.Errorf("Failed to fetch document from %s", requestURL)
+		configureHttpResponse(rw, http.StatusFailedDependency, "Failed to fetch document from API.")
+		return
+	}
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		logrus.Errorf("Failed to fetch document from %s", requestURL)
+		configureHttpResponse(rw, http.StatusUnprocessableEntity, "Failed to read document from API.")
+		return
+	}
+
+	mimeType := http.DetectContentType(body)
+
+	if mimeType != "application/pdf" && mimeType != "image/png" {
+		logrus.Errorf("Api served an unexpected document type.")
+		configureHttpResponse(rw, http.StatusUnsupportedMediaType, "Document is not supported.")
+		return
+	}
+
+	var filename = ""
+
+	if mimeType == "application/pdf" {
+		filename = fmt.Sprintf("%d.pdf", id)
+	} else {
+		filename = fmt.Sprintf("%d.png", id)
+	}
+
+	err = os.WriteFile(filename, body, 0644)
+
+	if err != nil {
+		logrus.Errorf("Api served a corrupted document.")
+		configureHttpResponse(rw, http.StatusUnprocessableEntity, "Document is corrupted.")
+		return
+	}
+
+	http.ServeFile(rw, r, filename)
+}
 
 func NewHttpServer(port string) (*http.Server, error) {
 	err := prometheus.DefaultRegisterer.Register(version.NewCollector("documentkeeper"))
@@ -24,48 +118,21 @@ func NewHttpServer(port string) (*http.Server, error) {
 		return nil, err
 	}
 
-	mux := http.NewServeMux()
-	mux.Handle("/metrics", promhttp.Handler())
+	router.Handle("/metrics", promhttp.Handler())
 
-	mux.HandleFunc("/-/health", func(rw http.ResponseWriter, _ *http.Request) {
-		rw.WriteHeader(http.StatusOK)
-		rw.Header().Set("Content-Type", "application/json")
-
-		resp := map[string]string{
-			"message": "Healthy",
-		}
-
-		jsonResp, err := json.Marshal(resp)
-
-		if err != nil {
-			log.Fatalf("Error happened in JSON marshal. Err: %s", err)
-		}
-
-		rw.Write(jsonResp)
+	router.HandleFunc("/-/health", func(rw http.ResponseWriter, _ *http.Request) {
+		configureHttpResponse(rw, http.StatusOK, "Healthy")
 	})
 
-	mux.HandleFunc("/-/ready", func(rw http.ResponseWriter, _ *http.Request) {
-		rw.WriteHeader(http.StatusOK)
-		rw.Header().Set("Content-Type", "application/json")
-
-		resp := map[string]string{
-			"message": "Ready",
-		}
-
-		jsonResp, err := json.Marshal(resp)
-
-		if err != nil {
-			log.Fatalf("Error happened in JSON marshal. Err: %s", err)
-		}
-
-		rw.Write(jsonResp)
+	router.HandleFunc("/-/ready", func(rw http.ResponseWriter, _ *http.Request) {
+		configureHttpResponse(rw, http.StatusOK, "Ready")
 	})
 
-	mux.Handle("/document/{id}", GetDocument).Methods("GET")
+	router.HandleFunc("/document/{id}", GetDocument).Methods("GET")
 
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%v", port),
-		Handler:  mux,
+		Handler:  router,
 		ErrorLog: &log.Logger{},
 	}
 
@@ -80,12 +147,9 @@ func StartDocumentFetcher(httpPort string) {
 		os.Exit(1)
 	}
 
-	wg.Go(func() error {
-		if err := httpServer.ListenAndServer(); err != net_http.ErrServerClosed {
+	go func() {
+		if err := httpServer.ListenAndServe(); err != nil {
 			logrus.Errorf("http server error %v", err)
-			return err
 		}
-
-		return nil
-	})
+	}()
 }
