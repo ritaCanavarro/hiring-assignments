@@ -3,7 +3,10 @@ package api
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"net/http/httptest"
+	"os"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +16,6 @@ type Requests struct {
 	Url                string
 	Id                 int
 	ExpectedStatusCode int
-	ExpectedResponse   string
 }
 
 func TestIdentifierDefined_AsString_ReturnsFalse(t *testing.T) {
@@ -60,7 +62,7 @@ func TestGenerateFileName_DocumentIsPNG_ReturnsFilenameOfPNGType(t *testing.T) {
 	assert.Contains(t, filename, ".png")
 }
 
-func TestGetDocument_DocumentIsOfInvalidType_ReturnsError(t *testing.T) {
+func TestValidateContentType_DocumentIsOfInvalidType_ReturnsError(t *testing.T) {
 	mimeType := "image/jpeg"
 	response := httptest.NewRecorder()
 
@@ -69,7 +71,7 @@ func TestGetDocument_DocumentIsOfInvalidType_ReturnsError(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestGetDocument_DocumentIsOfValidType_ReturnsOk(t *testing.T) {
+func TestValidateContentType_DocumentIsOfValidType_ReturnsOk(t *testing.T) {
 	mimeType := "image/png"
 	response := httptest.NewRecorder()
 
@@ -78,23 +80,17 @@ func TestGetDocument_DocumentIsOfValidType_ReturnsOk(t *testing.T) {
 	assert.True(t, result)
 }
 
-func TestGetDocument_DocumentIsPNG_ReturnsPNG(t *testing.T) {
-	// server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(rw, r, "./dummyFiles/golang.png")
-	// }))
-	// defer server.Close()
+func TestFetchDocument_DocumentsAreValid_ReturnsOk(t *testing.T) {
+	for i := 1; i < 5; i++ {
+		response := httptest.NewRecorder()
+		id := rand.Int()
 
-	// response := httptest.NewRecorder()
-	// id := rand.Int()
-	// url := fmt.Sprintf("http://127.0.0.1:4096/document/%d", id)
-	// request, _ := http.NewRequest(http.MethodGet, url, nil)
+		filename, sucess := fetchDocument(response, id)
+		defer os.Remove(filename)
 
-	// GetDocument(response, request)
-
-	// assert.Equal(t, http.StatusUnsupportedMediaType, response.Result().StatusCode)
-	// assert.Equal(t, "Api served an unexpected document type.", response.Body.String())
-}
-
-func TestGetDocument_DocumentIsPDF_ReturnsPDF(t *testing.T) {
-
+		assert.True(t, sucess)
+		assert.Contains(t, filename, strconv.Itoa(id))
+		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
+		assert.NotNil(t, response.Body.String())
+	}
 }

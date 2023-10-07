@@ -92,7 +92,7 @@ func fetchDocument(rw http.ResponseWriter, id int) (string, bool) {
 	}
 
 	body, err := io.ReadAll(resp.Body)
-
+	defer resp.Body.Close()
 	if err != nil {
 		sendErrorMessage(defaultErrorMsg, http.StatusUnprocessableEntity, rw)
 		return "", false
