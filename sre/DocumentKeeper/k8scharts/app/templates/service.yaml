@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: document-keeper
+  labels:
+    {{- include "document-keeper.Labels" . | nindent 4 }}
+spec:
+  type: {{.Values.service.type}}
+  ports:
+    - port: {{.Values.service.port}}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "document-keeper.SelectorLabels" . | nindent 4 }}

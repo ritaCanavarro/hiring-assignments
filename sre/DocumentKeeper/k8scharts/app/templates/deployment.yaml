@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deploymnet
+metadata:
+  name: documentKeeper
+  labels:
+    {{- include "document-keeper.Labels" . | nindent 4 }}
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+    {{- include "document-keeper.SelectorLabels" . | nindent 4 }}
