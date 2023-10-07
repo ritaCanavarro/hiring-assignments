@@ -1,6 +1,15 @@
 package http
 
-import()
+import(
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
+)
 
 func NewHttpServer(port string) (*http.Server, error){
 	err := prometheus.DefaultRegisterer.Register(version.NewCollector("documentkeeper"))
