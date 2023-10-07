@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"DocumentKeeper/internal/api"
+	"DocumentKeeper/api"
 	"DocumentKeeper/internal/auxiliar"
 
 	"github.com/gorilla/mux"

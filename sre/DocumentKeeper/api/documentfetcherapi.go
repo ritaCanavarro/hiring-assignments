@@ -49,78 +49,87 @@ var errorCountDocumentFetcher = promauto.NewCounter(
 func processIdentifier(params map[string]string) int {
 	id, err := strconv.Atoi(params["id"])
 
-	if err != nil {
-		errorCountDocumentFetcher.Inc()
-		logrus.Errorf("Identifier is not a valid integer %v.", err)
-		return -1
-	}
-
-	if id < 0 {
-		errorCountDocumentFetcher.Inc()
-		logrus.Errorf("Identifier is not a positive integer.")
+	if err != nil || id < 0 {
 		return -1
 	}
 
 	return id
 }
 
-// -------------------- Functions -----------------------
+func generateFilename(mimeType string, id int) string {
+	if mimeType == "application/pdf" {
+		return fmt.Sprintf("%d.pdf", id)
+	} else {
+		return fmt.Sprintf("%d.png", id)
+	}
+}
 
-func GetDocument(rw http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := processIdentifier(params)
-
-	if id == -1 {
-		auxiliar.ConfigureHttpResponse(rw, http.StatusBadRequest, "Bad request because ID was not a valid positive integer.")
-		return
+func validateContentType(mimeType string, rw http.ResponseWriter) bool {
+	if mimeType != "application/pdf" && mimeType != "image/png" {
+		sendErrorMessage("Api served an unexpected document type.", http.StatusUnsupportedMediaType, rw)
+		return false
 	}
 
+	return true
+}
+
+func sendErrorMessage(errorMsg string, statusCode int, rw http.ResponseWriter) {
+	errorCountDocumentFetcher.Inc()
+
+	logrus.Errorf(errorMsg)
+	auxiliar.ConfigureHttpResponse(rw, statusCode, errorMsg)
+}
+
+func fetchDocument(rw http.ResponseWriter, id int) (string, bool) {
 	requestURL := fmt.Sprintf("http://localhost:%d", serverPort)
 	resp, err := http.Get(requestURL)
+	defaultErrorMsg := fmt.Sprintf("Failed to fetch document from %s", requestURL)
 
 	if err != nil {
-		errorCountDocumentFetcher.Inc()
-
-		logrus.Errorf("Failed to fetch document from %s", requestURL)
-		auxiliar.ConfigureHttpResponse(rw, http.StatusFailedDependency, "Failed to fetch document from API.")
-		return
+		sendErrorMessage(defaultErrorMsg, http.StatusFailedDependency, rw)
+		return "", false
 	}
 
 	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		errorCountDocumentFetcher.Inc()
-
-		logrus.Errorf("Failed to fetch document from %s", requestURL)
-		auxiliar.ConfigureHttpResponse(rw, http.StatusUnprocessableEntity, "Failed to read document from API.")
-		return
+		sendErrorMessage(defaultErrorMsg, http.StatusUnprocessableEntity, rw)
+		return "", false
 	}
 
 	mimeType := http.DetectContentType(body)
+	valideMimeType := validateContentType(mimeType, rw)
 
-	if mimeType != "application/pdf" && mimeType != "image/png" {
-		errorCountDocumentFetcher.Inc()
-
-		logrus.Errorf("Api served an unexpected document type.")
-		auxiliar.ConfigureHttpResponse(rw, http.StatusUnsupportedMediaType, "Document is not supported.")
-		return
+	if !valideMimeType {
+		return "", false
 	}
 
-	var filename = ""
-
-	if mimeType == "application/pdf" {
-		filename = fmt.Sprintf("%d.pdf", id)
-	} else {
-		filename = fmt.Sprintf("%d.png", id)
-	}
-
+	var filename = generateFilename(mimeType, id)
 	err = os.WriteFile(filename, body, 0644)
 
 	if err != nil {
 		corruptedCountDocumentFetcher.Inc()
+		msg := "Api served a corrupted document."
 
-		logrus.Errorf("Api served a corrupted document.")
-		auxiliar.ConfigureHttpResponse(rw, http.StatusUnprocessableEntity, "Document is corrupted.")
+		logrus.Errorf(msg)
+		auxiliar.ConfigureHttpResponse(rw, http.StatusUnprocessableEntity, msg)
+		return "", false
+	}
+
+	return filename, true
+}
+
+// -------------------- Functions -----------------------
+
+func GetDocument(rw http.ResponseWriter, r *http.Request) {
+	id := processIdentifier(mux.Vars(r))
+	if id == -1 {
+		sendErrorMessage("Bad request because ID was not a valid positive integer.", http.StatusBadRequest, rw)
+		return
+	}
+
+	filename, sucess := fetchDocument(rw, id)
+	if !sucess {
 		return
 	}
 
