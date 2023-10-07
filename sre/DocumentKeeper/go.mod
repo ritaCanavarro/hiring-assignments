@@ -1,6 +1,6 @@
 module DocumentKeeper
 
-go 1.21.2
+go 1.23
 
 require github.com/spf13/cobra v1.7.0
 

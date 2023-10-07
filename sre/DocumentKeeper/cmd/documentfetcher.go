@@ -7,12 +7,12 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/ritaCanavarro/hiring-assignments/sre/DocumentKeeper/internal/api"
+	"DocumentKeeper/internal/api"
 )
 
 var documentfetcherCmd = &cobra.Command{
 	Use: "documentfetcher",
-	Short: "Document fetcher will fetch you either a PNG or PDF."
+	Short: "Document fetcher will fetch you either a PNG or PDF.",
 
 	Run: func(cmd *cobra.Command, args []string){
 		ctx, cancel := context.WithCancel(context.Backgroung())
