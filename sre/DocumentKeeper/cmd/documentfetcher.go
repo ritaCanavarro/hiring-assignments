@@ -4,29 +4,23 @@ Copyright © 2023 ritaCanavarro
 package cmd
 
 import (
-	"os"
-	"os/signal"
+	"DocumentKeeper/internal/http"
 
-	"DocumentKeeper/internal/api"
+	"github.com/spf13/cobra"
 )
 
+var httpPort string
+
 var documentfetcherCmd = &cobra.Command{
-	Use: "documentfetcher",
+	Use:   "documentfetcher",
 	Short: "Document fetcher will fetch you either a PNG or PDF.",
 
-	Run: func(cmd *cobra.Command, args []string){
-		ctx, cancel := context.WithCancel(context.Backgroung())
-		wg, ctx := errgroup.WithContext(ctx)
-		term := make(chan os.Signal, 1)
-		signal.Notify(term, os.Interrupt, syscall.SIGTERM)
-
-		//TODO: Initialize HTTP SERVER
-
-		//TODO: Put HTTP Server to run
-	}
+	Run: func(cmd *cobra.Command, args []string) {
+		http.StartDocumentFetcher(httpPort)
+	},
 }
 
 func init() {
-	documentfetcherCmd.Flags().Int("http.port", "", "Defines the http port of the server.")
+	documentfetcherCmd.Flags().IntVarP(&httpPort, "http.port", "", "Defines the http port of the server.")
 	rootCmd.AddCommand(documentfetcherCmd)
 }
