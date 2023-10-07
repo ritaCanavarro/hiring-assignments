@@ -32,8 +32,7 @@ func NewHttpServer(port string) (*http.Server, error){
 		jsonResp, err := json.Marshal(resp)
 
 		if err != nil {
-			log.FatalF("Error happened in JSON marshal. Err: %s", err)
-			return
+			log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 		}
 
 		rw.Write(jsonResp)
@@ -50,10 +49,20 @@ func NewHttpServer(port string) (*http.Server, error){
 		jsonResp, err := json.Marshal(resp)
 
 		if err != nil {
-			log.FatalF("Error happened in JSON marshal. Err: %s", err)
-			return
+			log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 		}
 
 		rw.Write(jsonResp)
 	})
+
+	// TODO: Import Document fetcher API GET func
+	mux.Handle("/document/",func(rw http.ResponseWriter, _ *http.Request){})
+
+	server := &http.Server{
+		Addr: fmt.Sprintf(":%v", port),
+		Handler: mux,
+		ErrorLog: &log.Logger{},
+	}
+
+	return server, nil
 }
