@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var httpPort string
+var httpPort int
 
 var documentfetcherCmd = &cobra.Command{
 	Use:   "documentfetcher",
@@ -21,6 +21,6 @@ var documentfetcherCmd = &cobra.Command{
 }
 
 func init() {
-	documentfetcherCmd.Flags().IntVarP(&httpPort, "http.port", "", "Defines the http port of the server.")
+	documentfetcherCmd.Flags().IntVarP(&httpPort, "http.port", "p", 4096, "Defines the http port of the server.")
 	rootCmd.AddCommand(documentfetcherCmd)
 }

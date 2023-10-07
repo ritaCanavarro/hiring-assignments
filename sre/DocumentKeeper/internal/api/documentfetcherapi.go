@@ -51,13 +51,13 @@ func processIdentifier(params map[string]string) int {
 
 	if err != nil {
 		errorCountDocumentFetcher.Inc()
-		logrus.Errorf("Identifier is not a valid integer %v", err)
+		logrus.Errorf("Identifier is not a valid integer %v.", err)
 		return -1
 	}
 
 	if id < 0 {
 		errorCountDocumentFetcher.Inc()
-		logrus.Errorf("Identifier is not a positive integer %v", err)
+		logrus.Errorf("Identifier is not a positive integer.")
 		return -1
 	}
 

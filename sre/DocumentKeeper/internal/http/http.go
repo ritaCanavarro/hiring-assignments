@@ -21,7 +21,7 @@ import (
 var router = mux.NewRouter()
 
 // -------------------- Functions -----------------------
-func NewHttpServer(port string) (*http.Server, error) {
+func NewHttpServer(port int) (*http.Server, error) {
 	err := prometheus.DefaultRegisterer.Register(version.NewCollector("documentkeeper"))
 
 	if err != nil {
@@ -30,18 +30,18 @@ func NewHttpServer(port string) (*http.Server, error) {
 
 	router.Handle("/metrics", promhttp.Handler())
 
-	router.HandleFunc("/-/health", func(rw http.ResponseWriter, _ *http.Request) {
+	router.HandleFunc("/health", func(rw http.ResponseWriter, _ *http.Request) {
 		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Healthy")
 	})
 
-	router.HandleFunc("/-/ready", func(rw http.ResponseWriter, _ *http.Request) {
+	router.HandleFunc("/ready", func(rw http.ResponseWriter, _ *http.Request) {
 		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Ready")
 	})
 
 	router.HandleFunc("/document/{id}", api.GetDocument).Methods("GET")
 
 	server := &http.Server{
-		Addr:     fmt.Sprintf(":%v", port),
+		Addr:     fmt.Sprintf("127.0.0.1:%d", port),
 		Handler:  router,
 		ErrorLog: &log.Logger{},
 	}
@@ -49,7 +49,7 @@ func NewHttpServer(port string) (*http.Server, error) {
 	return server, nil
 }
 
-func StartDocumentFetcher(httpPort string) {
+func StartDocumentFetcher(httpPort int) {
 	httpServer, err := NewHttpServer(httpPort)
 
 	if err != nil {
@@ -57,9 +57,7 @@ func StartDocumentFetcher(httpPort string) {
 		os.Exit(1)
 	}
 
-	go func() {
-		if err := httpServer.ListenAndServe(); err != nil {
-			logrus.Errorf("http server error %v", err)
-		}
-	}()
+	if err := httpServer.ListenAndServe(); err != nil {
+		logrus.Errorf("http server error %v", err)
+	}
 }
