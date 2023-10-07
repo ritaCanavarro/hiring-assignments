@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
-	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/sirupsen/logrus"
@@ -46,8 +46,9 @@ var errorCountDocumentFetcher = promauto.NewCounter(
 
 // -------------------- Auxiliar Functions -----------------------
 
-func processIdentifier(params map[string]string) int {
-	id, err := strconv.Atoi(params["id"])
+func processIdentifier(url string) int {
+	param := strings.Split(url, "/document/")
+	id, err := strconv.Atoi(param[1])
 
 	if err != nil || id < 0 {
 		return -1
@@ -122,7 +123,7 @@ func fetchDocument(rw http.ResponseWriter, id int) (string, bool) {
 // -------------------- Functions -----------------------
 
 func GetDocument(rw http.ResponseWriter, r *http.Request) {
-	id := processIdentifier(mux.Vars(r))
+	id := processIdentifier(r.URL.Path)
 	if id == -1 {
 		sendErrorMessage("Bad request because ID was not a valid positive integer.", http.StatusBadRequest, rw)
 		return
