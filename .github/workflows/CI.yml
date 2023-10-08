@@ -1,0 +1,54 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: SREChallenge-CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: documentkeeper
+      PROJECT_ID: documentkeeper-04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+      with:
+        gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+        registry: eu.gcr.io
+        project_id: ${{ env.PROJECT_ID }}
+        image_name: dummy-pdf-or-png
+        image_tag: latest,v1
+        context: ./sre/dummy-pdf-or-png
+
+    - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+      with:
+        gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+        registry: eu.gcr.io
+        project_id: ${{ env.PROJECT_ID }}
+        image_name: documentkeeper
+        image_tag: latest,v1
+        dockerfile: ./sre/Documentkeeper/Dockerfile
+        context: ./sre/Documentkeeper
+
+    # - name: Helm tool installer
+    #   uses: Azure/setup-helm@v3
+    #   with:
+    #     version: v3.12.3
+
+    # - name: helm lint and template
+    #   run: |
+    #     helm lint sre/Documentkeeper/k8scharts/app
+    #     helm template . -f sre/Documentkeeper/k8scharts/app/values.yaml
