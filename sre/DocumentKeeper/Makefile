@@ -1,7 +1,7 @@
 DOCKER_IMAGE := documentkeeper
 
 build:
-	docker build -t ${DOCKER_IMAGE} . -f Dockerfile
+	docker build -t ${DOCKER_IMAGE} .
 .PHONY: build 
 
 run: build
