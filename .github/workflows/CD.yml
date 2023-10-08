@@ -50,8 +50,8 @@ on:
 
 env:
   PROJECT_ID: documentkeeper-04 # TODO: update Google Cloud project id
-  GAR_LOCATION: europe-southwest1	 # TODO: update Artifact Registry location
-  SERVICE: documentkeeper4 # TODO: update Cloud Run service name
+  GAR_LOCATION: europe-southwest1-docker.pkg.dev	 # TODO: update Artifact Registry location
+  SERVICE: images # TODO: update Cloud Run service name
   REGION: europe-southwest1	 # TODO: update Cloud Run service region
 
 jobs:
@@ -84,7 +84,7 @@ jobs:
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
       - name: Build and Push Container
-        run: |-
+        run: |
           docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./sre/DocumentKeeper
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
 
