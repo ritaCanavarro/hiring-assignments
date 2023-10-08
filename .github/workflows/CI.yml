@@ -29,10 +29,13 @@ jobs:
       with:
         version: v3.12.3
 
-    - name: helm lint and template
-      run: |
-        helm lint sre/DocumentKeeper/k8scharts/app
-        helm template . -f sre/DocumentKeeper/k8scharts/app/values.yaml
+    - name: Helm Check Action
+      uses: hopisaurus/helm-check-action@v0.1.1
+      with:
+        # Path to the values.yaml
+        chart-values: sre/DocumentKeeper/k8scharts/app/values.yaml
+        # Path to the Chart.yaml
+        chart-location: sre/DocumentKeeper/k8scharts/app/Chart.yaml
 
     - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
       with:
