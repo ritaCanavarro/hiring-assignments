@@ -50,7 +50,7 @@ on:
 
 env:
   PROJECT_ID: documentkeeper-04 # TODO: update Google Cloud project id
-  GAR_LOCATION: europe-southwest1-docker.pkg.dev	 # TODO: update Artifact Registry location
+  GAR_LOCATION: europe-southwest1 # TODO: update Artifact Registry location
   SERVICE: images # TODO: update Cloud Run service name
   REGION: europe-southwest1	 # TODO: update Cloud Run service region
 
