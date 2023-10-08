@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: {{ include "dummy-pdf-or-png.fullname" . }}
   labels:
-    {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+    {{- include "dummy-pdf-or-png.labels" . | nindent 4 }}
 spec:
   ingressClassName:
   rules:

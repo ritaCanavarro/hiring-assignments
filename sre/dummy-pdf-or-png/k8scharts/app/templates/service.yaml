@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "dummy-pdf-or-png.fullname" . }}
   labels:
-    {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+    {{- include "dummy-pdf-or-png.labels" . | nindent 4 }}
 spec:
   type: {{.Values.service.type}}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "dummy-pdf-or-png.SelectorLabels" . | nindent 4 }}
+    {{- include "dummy-pdf-or-png.selectorLabels" . | nindent 4 }}

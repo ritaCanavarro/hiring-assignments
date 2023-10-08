@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: {{ include "document-keeper.fullname" . }}
   labels:
-    {{- include "document-keeper.Labels" . | nindent 4 }}
+    {{- include "document-keeper.labels" . | nindent 4 }}
 spec:
   ingressClassName:
   rules:

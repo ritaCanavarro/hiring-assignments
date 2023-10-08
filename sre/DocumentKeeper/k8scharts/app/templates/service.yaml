@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "document-keeper.fullname" . }}
   labels:
-    {{- include "document-keeper.Labels" . | nindent 4 }}
+    {{- include "document-keeper.labels" . | nindent 4 }}
 spec:
   type: {{.Values.service.type}}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "document-keeper.SelectorLabels" . | nindent 4 }}
+    {{- include "document-keeper.selectorLabels" . | nindent 4 }}
