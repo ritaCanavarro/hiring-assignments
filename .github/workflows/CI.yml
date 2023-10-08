@@ -31,11 +31,11 @@ jobs:
 
     - name: Helm Check Action
       uses: hopisaurus/helm-check-action@v0.1.1
-      with:
+      env:
         # Path to the values.yaml
-        chart-values: sre/DocumentKeeper/k8scharts/app/values.yaml
+        CHART_VALUES: sre/DocumentKeeper/k8scharts/app/values.yaml
         # Path to the Chart.yaml
-        chart-location: sre/DocumentKeeper/k8scharts/app/Chart.yaml
+        CHART_LOCATION:  sre/DocumentKeeper/k8scharts/app
 
     - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
       with:
