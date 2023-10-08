@@ -40,8 +40,8 @@ jobs:
         project_id: ${{ env.PROJECT_ID }}
         image_name: documentkeeper
         image_tag: latest,v1
-        dockerfile: ./sre/Documentkeeper/Dockerfile
-        context: ./sre/Documentkeeper
+        dockerfile: ./sre/DocumentKeeper/Dockerfile
+        context: ./sre/DocumentKeeper
 
     # - name: Helm tool installer
     #   uses: Azure/setup-helm@v3
