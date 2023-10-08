@@ -1,0 +1,17 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "dummy-pdf-or-png.fullname" . }}
+  labels:
+    {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "dummy-pdf-or-png.fullname" . }}
+  updatePolicy:
+    updateMode: {{ .Values.vpa.updateMode | quote }}
+    minReplicas: {{ .Values.vpa.updateMinReplicas | default 2 }}
+  resourcePolicy:
+    containerPolicies:
+      {{ toYaml .Values.vpa.containerPolicies | nindent 6 }}

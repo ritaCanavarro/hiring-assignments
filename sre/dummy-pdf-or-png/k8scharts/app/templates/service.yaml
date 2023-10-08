@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dummy-pdf-or-png.fullname" . }}
+  labels:
+    {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+spec:
+  type: {{.Values.service.type}}
+  ports:
+    - port: {{.Values.service.port}}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dummy-pdf-or-png.SelectorLabels" . | nindent 4 }}

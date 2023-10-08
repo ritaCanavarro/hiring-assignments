@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deploymnet
+metadata:
+  name: {{ include "dummy-pdf-or-png.fullname" . }}
+  labels:
+    {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+    {{- include "dummy-pdf-or-png.SelectorLabels" . | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dummy-pdf-or-png.Labels" . | nindent 4 }}
+    spec:
+      containers:
+        - name: {{ include "dummy-pdf-or-png.fullname" . }}
+          image:
+          ports:
+            - name: http
+              containerPort: 4096
+              protocol: TCP
+          resources: 
+            {{- toYaml .Values.resources | nindent 12}}
+          livenessProbe:
+            httpGet:
+              path: /-/health
+              port: http
+            initialDelaySeconds: {{.Values.livenessProbe.initialDelaySeconds}}
+            periodSeconds: {{.Values.livenessProbe.periodSeconds}}
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{.Values.readinessProbe.initialDelaySeconds}}
+            periodSeconds: {{.Values.readinessProbe.periodSeconds}}
+

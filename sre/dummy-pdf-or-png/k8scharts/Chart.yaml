@@ -1,0 +1,4 @@
+apiVersion: v1
+description: The charts for Dummy PDF or PNG.
+name: dummy-pdf-or-png-charts
+version: 1.0.0
