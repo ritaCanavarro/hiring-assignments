@@ -1,7 +1,7 @@
 package api
 
 import (
-	"DocumentKeeper/internal/auxiliar"
+	"DocumentKeeper/auxiliar"
 	"fmt"
 	"io"
 	"net/http"

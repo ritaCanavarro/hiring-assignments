@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"DocumentKeeper/api"
-	"DocumentKeeper/internal/auxiliar"
+	"DocumentKeeper/auxiliar"
 
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
