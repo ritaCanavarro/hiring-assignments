@@ -1,0 +1,30 @@
+replicas: 1
+
+resources:
+  limits:
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+service:
+  type: ClusterIP
+  port: 4096
+  portName: http
+
+vpa:
+  updateMode: "Auto" ## Select Off to use recommender mode
+  updateMinReplicas: 1 # minimal number of replicas which need to be alive for Updater to attempt pod eviction (only takes action if auto mode is on)
+  containerPolicies: 
+    - containerName: 'document-keeper'
+      minAllowed:
+        cpu: "100m"
+        memory: "256Mi"
