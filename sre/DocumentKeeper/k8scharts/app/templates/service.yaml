@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: document-keeper
+  name: {{ include "document-keeper.fullname" . }}
   labels:
     {{- include "document-keeper.Labels" . | nindent 4 }}
 spec:

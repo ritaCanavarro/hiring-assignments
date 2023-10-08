@@ -30,11 +30,11 @@ func NewHttpServer(port int) (*http.Server, error) {
 
 	router.Handle("/metrics", promhttp.Handler())
 
-	router.HandleFunc("/health", func(rw http.ResponseWriter, _ *http.Request) {
+	router.HandleFunc("/-/health", func(rw http.ResponseWriter, _ *http.Request) {
 		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Healthy")
 	})
 
-	router.HandleFunc("/ready", func(rw http.ResponseWriter, _ *http.Request) {
+	router.HandleFunc("/-/ready", func(rw http.ResponseWriter, _ *http.Request) {
 		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Ready")
 	})
 
