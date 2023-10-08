@@ -13,7 +13,7 @@ import (
 )
 
 type Requests struct {
-	Url                string
+	FilePath           string
 	Id                 int
 	ExpectedStatusCode int
 }
@@ -81,16 +81,35 @@ func TestValidateContentType_DocumentIsOfValidType_ReturnsOk(t *testing.T) {
 }
 
 func TestFetchDocument_DocumentsAreValid_ReturnsOk(t *testing.T) {
-	for i := 1; i < 5; i++ {
-		response := httptest.NewRecorder()
-		id := rand.Int()
+	requests := make([]Requests, 2)
+	requests[0] = Requests{
+		"./dummyFiles/dummy.png",
+		rand.Int(),
+		200,
+	}
 
-		filename, sucess := fetchDocument(response, id)
+	requests[1] = Requests{
+		"./dummyFiles/dummy.pdf",
+		rand.Int(),
+		200,
+	}
+
+	for _, reqs := range requests {
+		dummyServer := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			rw.WriteHeader(http.StatusOK)
+
+			http.ServeFile(rw, r, reqs.FilePath)
+		}))
+		defer dummyServer.Close()
+
+		response := httptest.NewRecorder()
+
+		filename, sucess := fetchDocument(response, reqs.Id, dummyServer.URL)
 		defer os.Remove(filename)
 
 		assert.True(t, sucess)
-		assert.Contains(t, filename, strconv.Itoa(id))
-		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
+		assert.Contains(t, filename, strconv.Itoa(reqs.Id))
+		assert.Equal(t, reqs.ExpectedStatusCode, response.Result().StatusCode)
 		assert.NotNil(t, response.Body.String())
 	}
 }

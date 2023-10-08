@@ -81,8 +81,7 @@ func sendErrorMessage(errorMsg string, statusCode int, rw http.ResponseWriter) {
 	auxiliar.ConfigureHttpResponse(rw, statusCode, errorMsg)
 }
 
-func fetchDocument(rw http.ResponseWriter, id int) (string, bool) {
-	requestURL := fmt.Sprintf("http://localhost:%d", serverPort)
+func fetchDocument(rw http.ResponseWriter, id int, requestURL string) (string, bool) {
 	resp, err := http.Get(requestURL)
 	defaultErrorMsg := fmt.Sprintf("Failed to fetch document from %s", requestURL)
 
@@ -129,7 +128,9 @@ func GetDocument(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filename, sucess := fetchDocument(rw, id)
+	requestURL := fmt.Sprintf("http://localhost:%d", serverPort)
+
+	filename, sucess := fetchDocument(rw, id, requestURL)
 	if !sucess {
 		return
 	}
