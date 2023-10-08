@@ -24,6 +24,16 @@ jobs:
       with:
         go-version: '1.20'
 
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v3
+      with:
+        version: v3.12.3
+
+    - name: helm lint and template
+      run: |
+        helm lint sre/DocumentKeeper/k8scharts/app
+        helm template . -f sre/DocumentKeeper/k8scharts/app/values.yaml
+
     - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
       with:
         gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
@@ -42,13 +52,3 @@ jobs:
         image_tag: latest,v1
         dockerfile: ./sre/DocumentKeeper/Dockerfile
         context: ./sre/DocumentKeeper
-
-    # - name: Helm tool installer
-    #   uses: Azure/setup-helm@v3
-    #   with:
-    #     version: v3.12.3
-
-    # - name: helm lint and template
-    #   run: |
-    #     helm lint sre/Documentkeeper/k8scharts/app
-    #     helm template . -f sre/Documentkeeper/k8scharts/app/values.yaml
