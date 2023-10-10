@@ -109,3 +109,8 @@ Feedback on improvement points, tips to implement the improvement list or just n
 | Rita Canavarro  | @rita.canavarro  | Cloud Native Computing foundations |
 
 
+## Learning resources
+
+Terraform in 15 min - https://www.youtube.com/watch?v=l5k1ai_GBDE
+HashiCorp Certified: Terraform Associate 2023 - https://www.udemy.com/course/terraform-beginner-to-advanced/?ranMID=39197&ranEAID=JVFxdTr9V80&ranSiteID=JVFxdTr9V80-jGrjSNVTdCh1rZdy0o78iQ&LSNPUBID=JVFxdTr9V80&utm_source=aff-campaign&utm_medium=udemyads
+GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker - https://www.youtube.com/watch?v=R8_veQiYBjI
