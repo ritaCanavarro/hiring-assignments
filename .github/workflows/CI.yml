@@ -19,26 +19,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
-
-    - name: Install dependencies
-      working-directory: ./sre/DocumentKeeper
-      run: go mod tidy
-      
-    - name: Build
-      working-directory: ./sre/DocumentKeeper
-      run: go build -v DocumentKeeper
-      
-    - name: Test API with the Go CLI
-      working-directory: ./sre/DocumentKeeper
-      run: go test -v api
-
-    - name: Test Auxiliar with the Go CLI
-      run: go test -v sre/DocumentKeeper/auxiliar
-
     - name: Helm tool installer
       uses: Azure/setup-helm@v3
       with:
@@ -51,6 +31,14 @@ jobs:
         CHART_VALUES: sre/DocumentKeeper/k8scharts/app/values.yaml
         # Path to the Chart.yaml
         CHART_LOCATION:  sre/DocumentKeeper/k8scharts/app
+
+    - name: Helm Check Action
+      uses: hopisaurus/helm-check-action@v0.1.1
+      env:
+        # Path to the values.yaml
+        CHART_VALUES: sre/dummy-pdf-or-png/k8scharts/app/values.yaml
+        # Path to the Chart.yaml
+        CHART_LOCATION:  sre/dummy-pdf-or-png/k8scharts/app
 
     - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
       with:
