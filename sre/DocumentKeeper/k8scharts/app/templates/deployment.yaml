@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deploymnet
+kind: Deployment
 metadata:
   name: {{ include "document-keeper.fullname" . }}
   labels:
@@ -7,19 +7,24 @@ metadata:
 spec:
   replicas: {{.Values.replicas}}
   selector:
-    {{- include "document-keeper.selectorLabels" . | nindent 4 }}
+    matchLabels:
+      {{- include "document-keeper.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "document-keeper.labels" . | nindent 4 }}
+        {{- include "document-keeper.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "document-keeper.fullname" . }}
-          image:
+          image: documentkeeper
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 4096
               protocol: TCP
+          env:
+            - name: externalDNS
+              value: "dummypdforpng"
           resources: 
             {{- toYaml .Values.resources | nindent 12}}
           livenessProbe:

@@ -128,7 +128,7 @@ func GetDocument(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requestURL := fmt.Sprintf("http://localhost:%d", serverPort)
+	requestURL := fmt.Sprintf("http://%s:%d", os.Getenv("externalDNS"), serverPort)
 
 	filename, sucess := fetchDocument(rw, id, requestURL)
 	if !sucess {

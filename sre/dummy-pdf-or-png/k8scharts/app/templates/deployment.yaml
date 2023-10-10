@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deploymnet
+kind: Deployment
 metadata:
   name: {{ include "dummy-pdf-or-png.fullname" . }}
   labels:
@@ -7,18 +7,20 @@ metadata:
 spec:
   replicas: {{.Values.replicas}}
   selector:
-    {{- include "dummy-pdf-or-png.selectorLabels" . | nindent 4 }}
+    matchLabels:
+    {{- include "dummy-pdf-or-png.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "dummy-pdf-or-png.labels" . | nindent 4 }}
+        {{- include "dummy-pdf-or-png.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "dummy-pdf-or-png.fullname" . }}
-          image:
+          image: dummy-pdf-or-png
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 4096
+              containerPort: 3000
               protocol: TCP
           resources: 
             {{- toYaml .Values.resources | nindent 12}}
