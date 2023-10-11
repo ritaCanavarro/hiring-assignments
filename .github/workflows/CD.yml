@@ -75,7 +75,7 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
-          kubectl apply ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
-          kubectl apply ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
-          kubectl apply ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
           kubectl get services -o wide
