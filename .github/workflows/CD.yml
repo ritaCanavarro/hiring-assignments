@@ -75,8 +75,4 @@ jobs:
           --zone $REGION \
           --project $PROJECT_ID \
           --internal-ip
-          helm upgrade $PROJECT_ID $PROJECT_ID-cluster/ \
-            --set $SERVICE:latest \
-            --wait
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
