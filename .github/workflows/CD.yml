@@ -1,4 +1,4 @@
-name: CD
+name: SREChallenge-CD
 
 on:
   push:
@@ -7,14 +7,13 @@ on:
 env:
   SERVER: dummy-pdf-or-png
   PROJECT_ID: documentkeeper-04
-  GAR_LOCATION: europe-southwest1
   SERVICE: documentkeeper 
   REGION: europe-southwest1	
   REPOSITORY: images
+  DEPLOYMENT-NAME: sre-test
 
 jobs:
   deploy:
-
 
     permissions:
       contents: 'read'
@@ -31,6 +30,16 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY }}'
 
+      # Get the GKE credentials so we can deploy to the cluster
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: ${{ env.PROJECT_ID }}
+          location: ${{ env.REGION }}
+
+      - id: 'get-pods'
+        run: 'kubectl get pods'
+
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
       # Authenticate Docker to Google Cloud Artifact Registry
@@ -40,29 +49,30 @@ jobs:
         with:
           username: _json_key
           password: '${{ secrets.GCLOUD_SERVICE_KEY }}'
-          registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
+          registry: '${{ env.REGION }}-docker.pkg.dev'
 
       - name: Build and Push Container DocumentKeeper
         run: |
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest" ./sre/DocumentKeeper
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest"
+          docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest" ./sre/DocumentKeeper
+          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest"
 
-      - name: Build and Push Container DocumentKeeper
+      - name: Build and Push Container Dummy PDF or PNG
         run: |
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
+          docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
+          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
     
       # END - Docker auth and build
 
-      # - name: Deploy to Cloud Run
-      #   id: deploy
-      #   uses: google-github-actions/deploy-cloudrun@v0
-      #   with:
-      #     service: ${{ env.SERVICE }}
-      #     region: ${{ env.REGION }}
-      #     # NOTE: If using a pre-built image, update the image name here
-      #     image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:latest
-
-      # # If required, use the Cloud Run url output in later steps
-      # - name: Show Output
-      #   run: echo ${{ steps.deploy.outputs.url }}
+      # Set up kustomize
+      - name: Set up Kustomize
+        run: |-
+          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
+      
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:latest
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide

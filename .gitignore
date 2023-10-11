@@ -1,0 +1,6 @@
+sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
+sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
+sre/dummy-pdf-or-png/k8scharts/templatesWithValues/ingress.yaml
+sre/dummy-pdf-or-png/k8scharts/templatesWithValues/service.yaml
+sre/dummy-pdf-or-png/k8scharts/templatesWithValues/deployment.yaml
+sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
