@@ -65,12 +65,12 @@ jobs:
 
       - uses: jmagnusson/deploy-helm-gke-action@v1
         with:
-          docker-image-repo: ${{ env.REGION }}/${{ secrets.PROJECT_ID }}/${{ env.PROJECT_ID }}
+          docker-image-repo: ${{ env.REGION }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}
           docker-image-tag: latest
           helm-release-name: ${{ env.PROJECT_ID }}
           helm-chart-path: ./sre/DocumentKeeper/k8scharts/app/templates
           helm-vars-folder: ./sre/DocumentKeeper/k8scharts/app
-          gke-project: ${{ secrets.PROJECT_ID }}
+          gke-project: ${{ env.PROJECT_ID }}
           gke-cluster: ${{ env.CLUSTER_NAME }}
-          gke-zone: ${{ secrets.REGION }}
+          gke-zone: ${{ env.REGION }}
           gke-sa-key: ${{ secrets.GCLOUD_SERVICE_KEY }}
