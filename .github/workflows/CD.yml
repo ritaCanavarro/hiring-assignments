@@ -63,14 +63,20 @@ jobs:
     
       # END - Docker auth and build
 
-      - uses: jmagnusson/deploy-helm-gke-action@v1
+      - name: Helm tool installer
+        uses: Azure/setup-helm@v3
         with:
-          docker-image-repo: ${{ env.REGION }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}
-          docker-image-tag: latest
-          helm-release-name: ${{ env.PROJECT_ID }}
-          helm-chart-path: ./sre/DocumentKeeper/k8scharts/app
-          helm-vars-folder: ./sre/DocumentKeeper/k8scharts/app
-          gke-project: ${{ env.PROJECT_ID }}
-          gke-cluster: ${{ env.CLUSTER_NAME }}
-          gke-zone: ${{ env.REGION }}
-          gke-sa-key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          version: v3.12.3
+      
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          gcloud container clusters get-credentials $CLUSTER_NAME \
+          --zone $REGION \
+          --project $PROJECT_ID \
+          --internal-ip
+          helm upgrade $PROJECT_ID $PROJECT_ID-cluster/ \
+            --set $SERVICE:latest \
+            --wait
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
