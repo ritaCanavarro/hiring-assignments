@@ -43,6 +43,10 @@ func NewHttpServer(port int) (*http.Server, error) {
 		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Ready")
 	})
 
+	router.HandleFunc("/ping", func(rw http.ResponseWriter, _ *http.Request) {
+		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Ready")
+	})
+
 	router.HandleFunc("/document/{id}", api.GetDocument).Methods("GET")
 
 	server := &http.Server{

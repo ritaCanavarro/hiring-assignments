@@ -104,10 +104,29 @@ Open the UI in your local browser:
 `kubectl get services`
 `kubectl port-forward svc/prom-kube-prometheus-stack-prometheus 9090:9090`
 
+### Healtcheck Probing
+Go to the directory ./DocumentKeeper/k8scharts/templatesWithValues
+`helm install bexp prometheus-community/prometheus-blackbox-exporter --values blackbox.yaml`
+
+Apply the probe.yaml:
+`kubectl apply -f .\probe.yaml`
+
+Open the UI in your local browser:
+`kubectl get services`
+`kubectl port-forward svc/bexp-prometheus-blackbox-exporter 9115:9115`
+
+Make a call via browser to:
+`http://localhost:9115/probe?target=http://172.17.0.4:4096/-/ready&module=http_2xx&debug=true`
+
+Go back to the UI and you will be able to see the result of the Probing.
+
 ## Considerations - TBD
 I have chosen to do the step 1 and 3 of the hiring assignment. For step 1, I have experience with micro services and APIs and even though I am still recent to GO (I only know and worked on-and-off with it for a year and I have never done an API with it) I wanted to develop the service in this language so I could learn more about it, while trying my best to ensure Clean code practices - e.g I learned about Gorilla mux for HTTP routing and HttpTest for mocking HTTP requests. 
 
 As for step 3, I have worked with Make, Dockerfile and Helm charts (more with the last one) and I knew I wanted to have that at least to show a bit of the skills I learned (and am constantly learning) about Docker and Helm. Additionally, I have never worked with CI/CD and GCP as a maintainer but I wanted to challenge myself and show to the team that I am not scared of a challenge and that I will always try my best to learn and put what I am learning into practice. 
+
+As an additionall step I decided to provide the necessary configuration to setup a Prometheus and a Blackbox exporter so we can query the metrics via
+Prometheus UI and perform Healthchecks to the Document keeper service, respectively.
 
 ## Improvements list - TBD
 Improve the Github CI/CD pipeline to ensure that not only the Document Keeper image is deployed on Artifacts Registry but that it is either deployed on Google Cloud Run or on Google Kubernetes Engine (via its helm charts).
@@ -130,3 +149,4 @@ Terraform in 15 min - https://www.youtube.com/watch?v=l5k1ai_GBDE
 HashiCorp Certified: Terraform Associate 2023 - https://www.udemy.com/course/terraform-beginner-to-advanced/?ranMID=39197&ranEAID=JVFxdTr9V80&ranSiteID=JVFxdTr9V80-jGrjSNVTdCh1rZdy0o78iQ&LSNPUBID=JVFxdTr9V80&utm_source=aff-campaign&utm_medium=udemyads
 GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker - https://www.youtube.com/watch?v=R8_veQiYBjI
 Github Actions to GCP https://docs.github.com/en/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine
+Blackbox exporter https://medium.com/cloud-native-daily/blackbox-exporter-to-probe-or-not-to-probe-57a7a495534b

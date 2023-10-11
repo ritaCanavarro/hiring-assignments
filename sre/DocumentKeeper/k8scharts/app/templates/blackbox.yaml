@@ -1,0 +1,8 @@
+config:
+  modules:
+    http_2xx:
+      timeout: 15s
+      prober: http
+      http:
+        headers:
+          User-Agent: monitoring/blackbox_httpprober

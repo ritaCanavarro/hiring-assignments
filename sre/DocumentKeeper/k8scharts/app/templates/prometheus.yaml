@@ -4,3 +4,7 @@ prometheus:
    serviceMonitorSelector:
     matchLabels:
       app: documentkeeper
+   probeSelectorNilUsesHelmValues: false
+   probeSelector:
+    matchLabels:
+      httpprobecreator/probe: documentkeeper

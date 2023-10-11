@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    httpprobecreator/probe: documentkeeper
+  name: documentkeeper-probe
+  namespace: default
+spec:
+  interval: 30s
+  module: http_2xx
+  prober:
+    path: /read
+    url: 172.17.0.8:9115 ## Using the cluster IP
+  targets:
+    staticConfig:
+      labels:
+        healthcheck: ready
+        app: documentkeeper
+      static:
+      - http://172.17.0.4:4096/-/ready ## Using the service endpoint
