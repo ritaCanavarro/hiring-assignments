@@ -79,7 +79,6 @@ Once you have all the dependencies working as expected, you will run the Documen
 `kubectl apply -f .\deployment.yaml`
 `kubectl apply -f .\ingress.yaml`
 `kubectl apply -f .\service.yaml`
-`kubectl apply -f .\vpa.yaml` <- for VPA you must have the CRDs installed
 
 These steps will make the app be deployed to the minikube cluster. After that you can watch the logs by running `kubectl logs <container_name>` or the events by doing `kubectl events <container_name>`.
 
@@ -114,3 +113,7 @@ Feedback on improvement points, tips to implement the improvement list or just n
 Terraform in 15 min - https://www.youtube.com/watch?v=l5k1ai_GBDE
 HashiCorp Certified: Terraform Associate 2023 - https://www.udemy.com/course/terraform-beginner-to-advanced/?ranMID=39197&ranEAID=JVFxdTr9V80&ranSiteID=JVFxdTr9V80-jGrjSNVTdCh1rZdy0o78iQ&LSNPUBID=JVFxdTr9V80&utm_source=aff-campaign&utm_medium=udemyads
 GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker - https://www.youtube.com/watch?v=R8_veQiYBjI
+Github Actions to GCP https://docs.github.com/en/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine
+
+
+gcloud container clusters create documentkeeper04 --project=documentkeeper-04 --zone=europe-southwest1 --disk-type pd-standard
