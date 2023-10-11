@@ -30,6 +30,8 @@ jobs:
         uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+    
+      - uses: simenandre/setup-gke-gcloud-auth-plugin@v1
 
       # Get the GKE credentials so we can deploy to the cluster
       - id: 'get-credentials'
