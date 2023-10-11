@@ -74,5 +74,5 @@ jobs:
         run: |-
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
-          --project $PROJECT_ID \
+          --project $PROJECT_ID
           kubectl get services -o wide
