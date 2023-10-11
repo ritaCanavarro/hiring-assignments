@@ -7,10 +7,11 @@ on:
 env:
   SERVER: dummy-pdf-or-png
   PROJECT_ID: documentkeeper-04
+  CLUSTER_NAME: documentkeeper04
   SERVICE: documentkeeper 
   REGION: europe-southwest1	
   REPOSITORY: images
-  DEPLOYMENT-NAME: sre-test
+  DEPLOYMENT_NAME: sre-test
 
 jobs:
   deploy:
@@ -34,7 +35,7 @@ jobs:
       - id: 'get-credentials'
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          cluster_name: ${{ env.PROJECT_ID }}
+          cluster_name: ${{ env.CLUSTER_NAME }}
           location: ${{ env.REGION }}
 
       - id: 'get-pods'
