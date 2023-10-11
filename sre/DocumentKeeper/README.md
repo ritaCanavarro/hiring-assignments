@@ -46,10 +46,10 @@ Once you have all the dependencies working as expected, you will run the Dummy P
 These steps will make the app be deployed to the minikube cluster. After that you can watch the logs by running `kubectl logs <container_name>` or the events by doing `kubectl events <container_name>`.
 
 If you want to make requests to the Dummy PDF or PNG container you will need to run the following command to
-port-foward requests to it:
+port-forward requests to it:
 
 kubectl get services
-kubectl port-foward service/dummy-pdf-or-png 3000:3000
+kubectl port-forward service/dummy-pdf-or-png 3000:3000
 
 
 ### Building Document Keeper
@@ -83,10 +83,10 @@ Once you have all the dependencies working as expected, you will run the Documen
 These steps will make the app be deployed to the minikube cluster. After that you can watch the logs by running `kubectl logs <container_name>` or the events by doing `kubectl events <container_name>`.
 
 If you want to make requests to the Document Keeper container you will need to run the following command to
-port-foward requests to it:
+port-forward requests to it:
 
 kubectl get services
-kubectl port-foward service/documentkeeper 4096:4096
+kubectl port-forward service/documentkeeper 4096:4096
 
 ## Considerations - TBD
 I have chosen to do the step 1 and 3 of the hiring assignment. For step 1, I have experience with micro services and APIs and even though I am still recent to GO (I only know and worked on-and-off with it for a year and I have never done an API with it) I wanted to develop the service in this language so I could learn more about it, while trying my best to ensure Clean code practices - e.g I learned about Gorilla mux for HTTP routing and HttpTest for mocking HTTP requests. 
