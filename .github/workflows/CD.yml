@@ -12,6 +12,7 @@ env:
   REGION: europe-southwest1	
   REPOSITORY: images
   DEPLOYMENT_NAME: sre-test
+  GKE_REGION: europe-central2-a
 
 jobs:
   deploy:
@@ -38,7 +39,7 @@ jobs:
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
           cluster_name: ${{ env.CLUSTER_NAME }}
-          location: ${{ env.REGION }}
+          location: ${{ env.GKE_REGION }}
 
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
@@ -72,7 +73,7 @@ jobs:
       - name: Deploy
         run: |-
           gcloud container clusters get-credentials $CLUSTER_NAME \
-          --zone $REGION \
+          --zone $GKE_REGION \
           --project $PROJECT_ID \
           --internal-ip
           kubectl get services -o wide
