@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: documentkeeper
+  labels:
+    app: documentkeeper
+    release: prometheus
+spec:
+  endpoints:
+  - interval: 15s
+    scrapeTimeout: 10s
+    honorLabels: true
+    port: http
+    path: /metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: documentkeeper
+  namespaceSelector:
+    any: true

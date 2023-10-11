@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "document-keeper.fullname" . }}
+  labels:
+    {{- include "document-keeper.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - interval: {{ .Values.serviceMonitor.interval }}
+    {{- if .Values.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+    honorLabels: true
+    port: {{ .Values.serviceMonitor.portName }}
+    path: {{ .Values.serviceMonitor.path }}
+    scheme: {{ .Values.serviceMonitor.scheme }}
+    {{- if .Values.serviceMonitor.tlsConfig }}
+    tlsConfig:
+    {{- toYaml .Values.serviceMonitor.tlsConfig | nindent 6 }}
+    {{- end }}
+    {{- if .Values.serviceMonitor.relabelings }}
+    relabelings:
+    {{- toYaml .Values.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+  selector:
+    matchLabels:
+    {{- include "document-keeper.selectorLabels" . | nindent 8 }}
+  namespaceSelector:
+    any: true

@@ -2,14 +2,14 @@
  documentKeeper common labels
 */}}
 {{- define "document-keeper.labels" -}}
-app: documentKeeper
+app: documentkeeper
 {{- end }}
 
 {{/*
 documentKeeper selector labels
 */}}
 {{- define "document-keeper.selectorLabels" -}}
-app: documentKeeper
+app: documentkeeper
 {{- end }}
 
 {{/*

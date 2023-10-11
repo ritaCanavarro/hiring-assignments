@@ -5,8 +5,7 @@ package main
 
 import "DocumentKeeper/http"
 
-const httpPort = 4096
-
+// Main will start the HTTP server
 func main() {
-	http.StartDocumentFetcher(httpPort)
+	http.StartDocumentFetcher()
 }

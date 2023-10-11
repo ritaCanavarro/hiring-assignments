@@ -20,11 +20,15 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 4096
+              containerPort: {{.Values.port}}
               protocol: TCP
           env:
             - name: externalDNS
-              value: "dummypdforpng"
+              value: {{.Values.externalDNS}}
+            - name: externalPort
+              value: "{{.Values.externalPort}}"
+            - name: internalPort
+              value: "{{.Values.port}}"
           resources: 
             {{- toYaml .Values.resources | nindent 12}}
           livenessProbe:

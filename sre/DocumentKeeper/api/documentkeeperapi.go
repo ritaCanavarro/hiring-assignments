@@ -14,10 +14,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// -------------------- Global Vars & Const -----------------------
-
-const serverPort = 3000
-
 // -------------------- Metrics -----------------------
 
 var sucessCountDocumentFetcher = promauto.NewCounter(
@@ -46,6 +42,9 @@ var errorCountDocumentFetcher = promauto.NewCounter(
 
 // -------------------- Auxiliar Functions -----------------------
 
+// processIdentifier verifies that the user
+// sent a proper positive integer when
+// asking for a document
 func processIdentifier(url string) int {
 	param := strings.Split(url, "/document/")
 	id, err := strconv.Atoi(param[1])
@@ -57,6 +56,10 @@ func processIdentifier(url string) int {
 	return id
 }
 
+// generateFilename takes into account the mimeType
+// of the document sent by the dummy service and
+// defines a proper filename with the Id provided
+// by the user
 func generateFilename(mimeType string, id int) string {
 	if mimeType == "application/pdf" {
 		return fmt.Sprintf("%d.pdf", id)
@@ -65,6 +68,9 @@ func generateFilename(mimeType string, id int) string {
 	}
 }
 
+// validateContentType validates if the mimeType
+// of the document sent by the dummy service is
+// either a PDF or a PNG
 func validateContentType(mimeType string, rw http.ResponseWriter) bool {
 	if mimeType != "application/pdf" && mimeType != "image/png" {
 		sendErrorMessage("Api served an unexpected document type.", http.StatusUnsupportedMediaType, rw)
@@ -74,6 +80,9 @@ func validateContentType(mimeType string, rw http.ResponseWriter) bool {
 	return true
 }
 
+// sendErrorMessage takes an error message, a status code,
+// and a Response writer and sends an HTTP response back
+// to the user. Additionally, also increases the error metric counter.
 func sendErrorMessage(errorMsg string, statusCode int, rw http.ResponseWriter) {
 	errorCountDocumentFetcher.Inc()
 
@@ -81,6 +90,10 @@ func sendErrorMessage(errorMsg string, statusCode int, rw http.ResponseWriter) {
 	auxiliar.ConfigureHttpResponse(rw, statusCode, errorMsg)
 }
 
+// fetchDocument takes the Id that the user sent, the request URL of the dummy server
+// and the Response writer and fetches a random document. After reading the document
+// it will ensure that it is either a PDF or a PNG and that it is not a corrupted
+// document. If all is well, it will send the document back to the user.
 func fetchDocument(rw http.ResponseWriter, id int, requestURL string) (string, bool) {
 	resp, err := http.Get(requestURL)
 	defaultErrorMsg := fmt.Sprintf("Failed to fetch document from %s", requestURL)
@@ -121,10 +134,17 @@ func fetchDocument(rw http.ResponseWriter, id int, requestURL string) (string, b
 
 // -------------------- Functions -----------------------
 
+// GetDocument
 func GetDocument(rw http.ResponseWriter, r *http.Request) {
 	id := processIdentifier(r.URL.Path)
 	if id == -1 {
 		sendErrorMessage("Bad request because ID was not a valid positive integer.", http.StatusBadRequest, rw)
+		return
+	}
+
+	serverPort, err := strconv.Atoi(os.Getenv("externalPort"))
+	if err != nil {
+		sendErrorMessage("Internal service Port is wrongly configured.", http.StatusInternalServerError, rw)
 		return
 	}
 

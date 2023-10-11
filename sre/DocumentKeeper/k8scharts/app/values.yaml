@@ -23,8 +23,23 @@ service:
 vpa:
   updateMode: "Auto" ## Select Off to use recommender mode
   updateMinReplicas: 1 # minimal number of replicas which need to be alive for Updater to attempt pod eviction (only takes action if auto mode is on)
-  containerPolicies: 
-    - containerName: 'document-keeper'
-      minAllowed:
-        cpu: "100m"
-        memory: "256Mi"
+  containerPolicies:
+  - containerName: 'document-keeper'
+    minAllowed:
+      cpu: "100m"
+      memory: "256Mi"
+
+port: 4096
+externalPort: 3000
+externalDNS: "dummypdforpng"
+
+# Prometheus Operator ServiceMonitor configuration
+serviceMonitor:
+  path: /metrics
+  labels: {}
+  interval: 15s
+  scheme: http
+  tlsConfig: {}
+  scrapeTimeout: 10s
+  relabelings: []
+  portName: http

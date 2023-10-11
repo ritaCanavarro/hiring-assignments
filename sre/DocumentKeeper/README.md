@@ -34,7 +34,7 @@ make run
 Once you have all the dependencies working as expected, you will run the Dummy PDF or PNGcontainer by executing the following procedure:
 
 * Start a minikube cluster: `minikube start --kubernetes-version=v1.23.0 --memory=4g` or `minikube start --kubernetes-version=v1.23.0 --memory=4g --driver=hyperv`
-* Run `minikube -p minikube docker-env --shell powershell | Invoke-Expression` in order to use the docker daemon inside the minikube cluster
+* Run `eval $(minikube docker-env)` or `minikube -p minikube docker-env --shell powershell | Invoke-Expression` in order to use the docker daemon inside the minikube cluster
 * Run `make build` in order to build the image add it to the minikube cluster
 * Go to the folder .\k8scharts\templatesWithValues, which were generated via `helm template . -f values.yaml > templates.yaml` and run the follwoing commands:
 
@@ -48,8 +48,8 @@ These steps will make the app be deployed to the minikube cluster. After that yo
 If you want to make requests to the Dummy PDF or PNG container you will need to run the following command to
 port-forward requests to it:
 
-kubectl get services
-kubectl port-forward service/dummy-pdf-or-png 3000:3000
+`kubectl get services`
+`kubectl port-forward service/dummypdforpng 3000:3000`
 
 
 ### Building Document Keeper
@@ -72,7 +72,7 @@ make run
 Once you have all the dependencies working as expected, you will run the Document Keeper container by executing the following procedure:
 
 * Start a minikube cluster: `minikube start --kubernetes-version=v1.23.0 --memory=4g` or `minikube start --kubernetes-version=v1.23.0 --memory=4g --driver=hyperv`
-* Run `minikube -p minikube docker-env --shell powershell | Invoke-Expression` in order to use the docker daemon inside the minikube cluster
+* Run `eval $(minikube docker-env)` or `minikube -p minikube docker-env --shell powershell | Invoke-Expression` in order to use the docker daemon inside the minikube cluster
 * Run `make build ` in order to build the image add it to the minikube cluster
 * Go to the folder .\k8scharts\templatesWithValues, which were generated via `helm template . -f values.yaml > templates.yaml` and run the follwoing commands:
 
@@ -85,8 +85,24 @@ These steps will make the app be deployed to the minikube cluster. After that yo
 If you want to make requests to the Document Keeper container you will need to run the following command to
 port-forward requests to it:
 
-kubectl get services
-kubectl port-forward service/documentkeeper 4096:4096
+`kubectl get services`
+`kubectl port-forward service/documentkeeper 4096:4096`
+
+### Check metrics in Prometheus UI
+Add the helm repository and install prometheus with helm chart:
+
+`helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
+`helm repo update`
+
+Go to the directory ./DocumentKeeper/k8scharts/templatesWithValues
+`helm install prom prometheus-community/kube-prometheus-stack --values prometheus.yaml`
+
+Apply the serviceMonitor.yaml:
+`kubectl apply -f .\serviceMonitor.yaml`
+
+Open the UI in your local browser:
+`kubectl get services`
+`kubectl port-forward svc/prom-kube-prometheus-stack-prometheus 9090:9090`
 
 ## Considerations - TBD
 I have chosen to do the step 1 and 3 of the hiring assignment. For step 1, I have experience with micro services and APIs and even though I am still recent to GO (I only know and worked on-and-off with it for a year and I have never done an API with it) I wanted to develop the service in this language so I could learn more about it, while trying my best to ensure Clean code practices - e.g I learned about Gorilla mux for HTTP routing and HttpTest for mocking HTTP requests. 
@@ -114,6 +130,3 @@ Terraform in 15 min - https://www.youtube.com/watch?v=l5k1ai_GBDE
 HashiCorp Certified: Terraform Associate 2023 - https://www.udemy.com/course/terraform-beginner-to-advanced/?ranMID=39197&ranEAID=JVFxdTr9V80&ranSiteID=JVFxdTr9V80-jGrjSNVTdCh1rZdy0o78iQ&LSNPUBID=JVFxdTr9V80&utm_source=aff-campaign&utm_medium=udemyads
 GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker - https://www.youtube.com/watch?v=R8_veQiYBjI
 Github Actions to GCP https://docs.github.com/en/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine
-
-
-gcloud container clusters create documentkeeper04 --project=documentkeeper-04 --zone=europe-southwest1 --disk-type pd-standard
