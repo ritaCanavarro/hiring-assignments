@@ -5,7 +5,7 @@ metadata:
   labels:
     app: documentkeeper
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - port: 4096
     targetPort: http
