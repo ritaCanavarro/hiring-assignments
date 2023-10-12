@@ -5,9 +5,9 @@ The Document Keeper is the go to service to have your need of random PDFs and PN
 To ask for a document you just need to access http://34.118.53.100:4096/document/{randomNumber} and voila you will get a random document. However, the Keeper is not always very certain where he keeps the forbidden PDF documents so once in a while you might an error message about an unprocessable entity.
 
 ## Access the Services running in GKE
-DocumentKeeper: http://34.118.53.100:4096/
-Prometheus UI: http://34.118.53.140:9090/
-Blackbox Exporter: http://34.116.192.232:9115/
+- DocumentKeeper: http://34.118.53.100:4096/
+- Prometheus UI: http://34.118.53.140:9090/
+- Blackbox Exporter: http://34.116.192.232:9115/
 
 ## Get DocumentKeeper Metrics
 Make a request to http://34.118.53.100:4096/metrics
