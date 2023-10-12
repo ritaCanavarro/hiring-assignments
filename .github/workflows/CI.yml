@@ -48,6 +48,7 @@ jobs:
 
     - name: Change Directory to Your Project
       run: | 
+        ls
         cd sre/DocumentKeeper/
         ls
         go mod download
