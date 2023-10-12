@@ -47,7 +47,7 @@ jobs:
         go-version: '>=1.17.0'
 
     - name: Change Directory to Your Project
-      run: cd sre/DocumentKeeper
+      run: cd ./sre/DocumentKeeper/
 
     - name: LS to Your Project
       run: ls
