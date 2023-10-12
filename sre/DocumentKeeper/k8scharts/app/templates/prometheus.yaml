@@ -1,4 +1,6 @@
 prometheus:
+  service:
+    type: LoadBalancer
  prometheusSpec:
    serviceMonitorSelectorNilUsesHelmValues: false
    serviceMonitorSelector:

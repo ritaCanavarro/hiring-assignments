@@ -52,6 +52,9 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          helm install prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
