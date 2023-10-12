@@ -49,6 +49,9 @@ jobs:
     - name: Change Directory to Your Project
       run: cd sre/DocumentKeeper
 
+    - name: LS to Your Project
+      run: ls
+
     - name: Install Dependencies
       run: go mod download
 
