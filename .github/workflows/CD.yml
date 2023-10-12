@@ -52,6 +52,8 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
           helm install bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
