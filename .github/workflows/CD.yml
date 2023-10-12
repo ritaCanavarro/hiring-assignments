@@ -55,6 +55,7 @@ jobs:
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/serviceMonitor.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/service.yaml
