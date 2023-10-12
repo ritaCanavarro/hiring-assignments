@@ -42,6 +42,13 @@ jobs:
         # Path to the Chart.yaml
         CHART_LOCATION:  sre/dummy-pdf-or-png/k8scharts/app
 
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '>=1.17.0'
+
+    - name: Run Tests API
+      run: go test sre/DocumentKeeper/api/documentkeeperapi_test.go
+
     # BEGIN - Docker auth and build
     - name: Google Auth
       id: auth
