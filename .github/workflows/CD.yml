@@ -55,6 +55,7 @@ jobs:
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
           helm install prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
+          helm install bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
