@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: document-keeper
-        image: gcr.io/documentkeeper-04/images/document-keeper:latest
+        image: eu.gcr.io/documentkeeper-04/documentkeeper:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
