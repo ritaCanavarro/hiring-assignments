@@ -15,7 +15,7 @@ spec:
   targets:
     staticConfig:
       labels:
-        healthcheck: ready
+        healthcheck: ping
         app: documentkeeper
       static:
-      - http://34.118.53.100:4096/-/ready ## Using the service endpoint
+      - http://34.118.53.100:4096/ping ## Using the service endpoint

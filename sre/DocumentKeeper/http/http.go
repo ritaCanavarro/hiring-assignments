@@ -44,7 +44,7 @@ func NewHttpServer(port int) (*http.Server, error) {
 	})
 
 	router.HandleFunc("/ping", func(rw http.ResponseWriter, _ *http.Request) {
-		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "Ready")
+		auxiliar.ConfigureHttpResponse(rw, http.StatusOK, "")
 	})
 
 	router.HandleFunc("/document/{id}", api.GetDocument).Methods("GET")
