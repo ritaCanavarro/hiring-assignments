@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: document-keeper
-        image: documentkeeper
+        image: europe-southwest1/documentkeeper-04/images/document-keeper:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
