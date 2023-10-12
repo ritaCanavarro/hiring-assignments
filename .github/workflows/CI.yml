@@ -70,24 +70,3 @@ jobs:
       run: |
         docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
         docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
-    
-    # END - Docker auth and build
-
-    # - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
-    #   with:
-    #     gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-    #     registry: eu.gcr.io
-    #     project_id: ${{ env.PROJECT_ID }}
-    #     image_name: dummy-pdf-or-png
-    #     image_tag: latest,v1
-    #     context: ./sre/dummy-pdf-or-png
-
-    # - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
-    #   with:
-    #     gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-    #     registry: eu.gcr.io
-    #     project_id: ${{ env.PROJECT_ID }}
-    #     image_name: documentkeeper
-    #     image_tag: latest,v1
-    #     dockerfile: ./sre/DocumentKeeper/Dockerfile
-    #     context: ./sre/DocumentKeeper
