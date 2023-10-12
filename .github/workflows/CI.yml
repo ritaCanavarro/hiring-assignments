@@ -7,6 +7,13 @@ on:
   push:
     branches: [ "master" ]
 
+env:
+  SERVER: dummy-pdf-or-png
+  PROJECT_ID: documentkeeper-04
+  SERVICE: documentkeeper 
+  REGION: europe-southwest1	
+  REPOSITORY: images
+
 jobs:
 
   build:
@@ -38,21 +45,49 @@ jobs:
         # Path to the Chart.yaml
         CHART_LOCATION:  sre/dummy-pdf-or-png/k8scharts/app
 
-    - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+    # BEGIN - Docker auth and build
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v0'
       with:
-        gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-        registry: eu.gcr.io
-        project_id: ${{ env.PROJECT_ID }}
-        image_name: dummy-pdf-or-png
-        image_tag: latest,v1
-        context: ./sre/dummy-pdf-or-png
+        credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY }}'
 
-    - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+    # Authenticate Docker to Google Cloud Artifact Registry
+    - name: Docker Auth
+      id: docker-auth
+      uses: 'docker/login-action@v1'
       with:
-        gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-        registry: eu.gcr.io
-        project_id: ${{ env.PROJECT_ID }}
-        image_name: documentkeeper
-        image_tag: latest,v1
-        dockerfile: ./sre/DocumentKeeper/Dockerfile
-        context: ./sre/DocumentKeeper
+        username: _json_key
+        password: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+        registry: '${{ env.REGION }}-docker.pkg.dev'
+
+    - name: Build and Push Container DocumentKeeper
+      run: |
+        docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest" ./sre/DocumentKeeper
+        docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest"
+
+    - name: Build and Push Container Dummy PDF or PNG
+      run: |
+        docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
+        docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
+    
+    # END - Docker auth and build
+
+    # - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+    #   with:
+    #     gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+    #     registry: eu.gcr.io
+    #     project_id: ${{ env.PROJECT_ID }}
+    #     image_name: dummy-pdf-or-png
+    #     image_tag: latest,v1
+    #     context: ./sre/dummy-pdf-or-png
+
+    # - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+    #   with:
+    #     gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+    #     registry: eu.gcr.io
+    #     project_id: ${{ env.PROJECT_ID }}
+    #     image_name: documentkeeper
+    #     image_tag: latest,v1
+    #     dockerfile: ./sre/DocumentKeeper/Dockerfile
+    #     context: ./sre/DocumentKeeper

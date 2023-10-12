@@ -41,28 +41,28 @@ jobs:
           cluster_name: ${{ env.CLUSTER_NAME }}
           location: ${{ env.GKE_REGION }}
 
-      # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
+      # # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
-      # Authenticate Docker to Google Cloud Artifact Registry
-      - name: Docker Auth
-        id: docker-auth
-        uses: 'docker/login-action@v1'
-        with:
-          username: _json_key
-          password: '${{ secrets.GCLOUD_SERVICE_KEY }}'
-          registry: '${{ env.REGION }}-docker.pkg.dev'
+      # # Authenticate Docker to Google Cloud Artifact Registry
+      # - name: Docker Auth
+      #   id: docker-auth
+      #   uses: 'docker/login-action@v1'
+      #   with:
+      #     username: _json_key
+      #     password: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+      #     registry: '${{ env.REGION }}-docker.pkg.dev'
 
-      - name: Build and Push Container DocumentKeeper
-        run: |
-          docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest" ./sre/DocumentKeeper
-          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest"
+      # - name: Build and Push Container DocumentKeeper
+      #   run: |
+      #     docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest" ./sre/DocumentKeeper
+      #     docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest"
 
-      - name: Build and Push Container Dummy PDF or PNG
-        run: |
-          docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
-          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
+      # - name: Build and Push Container Dummy PDF or PNG
+      #   run: |
+      #     docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest" ./sre/dummy-pdf-or-png
+      #     docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVER }}:latest"
     
-      # END - Docker auth and build
+      # # END - Docker auth and build
 
       - name: Helm tool installer
         uses: Azure/setup-helm@v3
