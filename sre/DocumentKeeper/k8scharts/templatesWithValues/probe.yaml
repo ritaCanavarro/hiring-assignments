@@ -11,7 +11,7 @@ spec:
   module: http_2xx
   prober:
     path: /read
-    url: 10.24.1.133:9115 ## Using the cluster IP
+    url: 34.116.192.232:9115 ## Using the LoadBalancer IP
   targets:
     staticConfig:
       labels:
