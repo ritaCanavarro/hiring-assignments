@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "document-keeper.labels" . | nindent 4 }}
 spec:
-  ingressClassName: documentkeeperIC
   rules:
   - http:
       paths:
