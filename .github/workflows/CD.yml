@@ -52,15 +52,18 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo update
-          helm install prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
-          helm install bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
           kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/serviceMonitor.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/probe.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/deployment.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/ingress.yaml
           kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/service.yaml
           kubectl get services -o wide
+
+      ## Add this four lines to the run above in the first run of this pipeline
+      ## helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+      ## helm repo update
+      ## helm install prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
+      ## helm install bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml

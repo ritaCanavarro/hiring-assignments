@@ -11,11 +11,11 @@ spec:
   module: http_2xx
   prober:
     path: /read
-    url: 172.17.0.8:9115 ## Using the cluster IP
+    url: 10.24.1.133:9115 ## Using the cluster IP
   targets:
     staticConfig:
       labels:
         healthcheck: ready
         app: documentkeeper
       static:
-      - http://172.17.0.4:4096/-/ready ## Using the service endpoint
+      - http://34.118.53.100:4096/-/ready ## Using the service endpoint
