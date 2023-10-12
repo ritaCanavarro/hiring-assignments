@@ -46,8 +46,14 @@ jobs:
       with:
         go-version: '>=1.17.0'
 
-    - name: Run Tests API
-      run: go test sre/DocumentKeeper/api/documentkeeperapi_test.go
+    - name: Change Directory to Your Project
+      run: cd sre/DocumentKeeper
+
+    - name: Install Dependencies
+      run: go mod download
+
+    - name: Run Tests
+      run: go test ./...
 
     # BEGIN - Docker auth and build
     - name: Google Auth
