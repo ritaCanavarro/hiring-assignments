@@ -123,16 +123,13 @@ Go back to the UI and you will be able to see the result of the Probing.
 ## Considerations - TBD
 I have chosen to do the step 1 and 3 of the hiring assignment. For step 1, I have experience with micro services and APIs and even though I am still recent to GO (I only know and worked on-and-off with it for a year and I have never done an API with it) I wanted to develop the service in this language so I could learn more about it, while trying my best to ensure Clean code practices - e.g I learned about Gorilla mux for HTTP routing and HttpTest for mocking HTTP requests. 
 
-As for step 3, I have worked with Make, Dockerfile and Helm charts (more with the last one) and I knew I wanted to have that at least to show a bit of the skills I learned (and am constantly learning) about Docker and Helm. Additionally, I have never worked with CI/CD and GCP as a maintainer but I wanted to challenge myself and show to the team that I am not scared of a challenge and that I will always try my best to learn and put what I am learning into practice. 
+As for step 3, I have worked with Make, Dockerfile and Helm charts (more with the last one) and I knew I wanted to have that at least to show a bit of the skills I learned (and am constantly learning) about Docker and Helm. Additionally, I have never worked with CI/CD and GCP as a developer/maintainer but I wanted to challenge myself and show to the team that I am not scared of a challenge and that I will always try my best to learn and put what I am learning into practice. 
 
 As an additionall step I decided to provide the necessary configuration to setup a Prometheus and a Blackbox exporter so we can query the metrics via
 Prometheus UI and perform Healthchecks to the Document keeper service, respectively.
 
-## Improvements list - TBD
-Improve the Github CI/CD pipeline to ensure that not only the Document Keeper image is deployed on Artifacts Registry but that it is either deployed on Google Cloud Run or on Google Kubernetes Engine (via its helm charts).
-
-Use Infrastructure as Code, in this case Terraform, to provide the resources needed to run the Document Keeper
-and see its metrics and logs.
+## Improvements list
+Use Infrastructure as Code, in this case Terraform, to provide the resources needed to run the Document Keeper and see its metrics and logs.
 
 ## Feedback
 Feedback on improvement points, tips to implement the improvement list or just new ideas that can make this service better, more reliable, secure and performatic are always welcome and will be discussed and iterated. Therefore, feel free to reach out to me either on the CNCF slack channel or via Linkedin. :) 
