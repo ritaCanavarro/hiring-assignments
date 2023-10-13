@@ -61,15 +61,15 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/service.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/serviceMonitor.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/probe.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/service.yaml
-          kubectl get services -o wide
+          kubectl apply -f ./DocumentKeeper/templatesWithValues/deployment.yaml
+          kubectl apply -f ./DocumentKeeper/templatesWithValues/ingress.yaml
+          kubectl apply -f ./DocumentKeeper/templatesWithValues/service.yaml
+          kubectl apply -f ./DocumentKeeper/templatesWithValues/serviceMonitor.yaml
+          kubectl apply -f ./DocumentKeeper/templatesWithValues/probe.yaml
+          kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/deployment.yaml
+          kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/ingress.yaml
+          kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/service.yaml
+        working-directory: sre/
 
       ## Add this four lines to the run above in the first run of this pipeline
       ## helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
