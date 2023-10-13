@@ -65,14 +65,14 @@ jobs:
           helm repo update
           helm upgrade prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
           helm upgrade bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/service.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/serviceMonitor.yaml
-          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/probe.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/serviceMonitor.yaml
+          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/probe.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/deployment.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/ingress.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/service.yaml
 
       ## Add this four lines to the run above in the first run of this pipeline
       ## helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
