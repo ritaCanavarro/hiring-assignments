@@ -42,6 +42,11 @@ jobs:
         # Path to the Chart.yaml
         CHART_LOCATION:  sre/dummy-pdf-or-png/k8scharts/app
 
+    - name: Package Helm Charts
+      run: |
+        helm package ./k8scharts
+      working-directory: sre/DocumentKeeper/
+
     - uses: actions/setup-go@v4
       with:
         go-version: '>=1.17.0'

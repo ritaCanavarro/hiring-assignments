@@ -45,12 +45,7 @@ jobs:
         uses: Azure/setup-helm@v3
         with:
           version: v3.12.3
-      
-      # - name: Package Helm Charts
-      #   run: |
-      #     helm package ./k8scharts
-      #   working-directory: sre/DocumentKeeper/
-
+    
       # - name: Run Helm Install
       #   run: helm install documentkeeper-1.0.0 k8scharts
       #   working-directory: sre/DocumentKeeper/
