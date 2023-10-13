@@ -51,9 +51,9 @@ jobs:
           helm package ./k8scharts
         working-directory: sre/DocumentKeeper/
 
-      - name: Run Helm Install
-        run: helm install documentkeeper-1.0.0 k8scharts
-        working-directory: sre/DocumentKeeper/
+      # - name: Run Helm Install
+      #   run: helm install documentkeeper-1.0.0 k8scharts
+      #   working-directory: sre/DocumentKeeper/
           
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
@@ -61,6 +61,8 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
+          helm update prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
+          helm update bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/deployment.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/ingress.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/service.yaml
@@ -69,7 +71,6 @@ jobs:
           kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/deployment.yaml
           kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/ingress.yaml
           kubectl apply -f ./dummy-pdf-or-png/templatesWithValues/service.yaml
-        working-directory: sre/
 
       ## Add this four lines to the run above in the first run of this pipeline
       ## helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
