@@ -61,8 +61,8 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
-          helm update prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
-          helm update bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
+          helm upgrade prom prometheus-community/kube-prometheus-stack --values ./sre/DocumentKeeper/k8scharts/app/templates/prometheus.yaml
+          helm upgrade bexp prometheus-community/prometheus-blackbox-exporter --values ./sre/DocumentKeeper/k8scharts/app/templates/blackbox.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/deployment.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/ingress.yaml
           kubectl apply -f ./DocumentKeeper/templatesWithValues/service.yaml
