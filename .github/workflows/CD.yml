@@ -52,7 +52,7 @@ jobs:
         working-directory: sre/DocumentKeeper/
 
       - name: Run Helm Install
-        run: helm install k8scharts
+        run: helm install documentkeeper-1.0.0 k8scharts
         working-directory: sre/DocumentKeeper/
           
       # Deploy the Docker image to the GKE cluster
