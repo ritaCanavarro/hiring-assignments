@@ -46,20 +46,29 @@ jobs:
         with:
           version: v3.12.3
       
+      - name: Package Helm Charts
+        run: |
+          helm package ./k8scharts
+        working-directory: sre/DocumentKeeper/
+
+      - name: Run Helm Install
+        run: helm install k8scharts
+        working-directory: sre/DocumentKeeper/
+          
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
         run: |-
           gcloud container clusters get-credentials $CLUSTER_NAME \
           --zone $GKE_REGION \
           --project $PROJECT_ID
-          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/service.yaml
-          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/serviceMonitor.yaml
-          kubectl apply -f ./sre/DocumentKeeper/k8scharts/templatesWithValues/probe.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/deployment.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/ingress.yaml
-          kubectl apply -f ./sre/dummy-pdf-or-png/k8scharts/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/deployment.yaml
+          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/ingress.yaml
+          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/service.yaml
+          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/serviceMonitor.yaml
+          kubectl apply -f ./sre/DocumentKeeper/templatesWithValues/probe.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/deployment.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/ingress.yaml
+          kubectl apply -f ./sre/dummy-pdf-or-png/templatesWithValues/service.yaml
           kubectl get services -o wide
 
       ## Add this four lines to the run above in the first run of this pipeline
