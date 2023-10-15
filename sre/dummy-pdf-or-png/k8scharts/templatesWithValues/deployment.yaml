@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: dummypdforpng
-        image: eu.gcr.io/documentkeeper-04/dummy-pdf-or-png:latest
+        image: eu.gcr.io/sre-documentkeeper/dummy-pdf-or-png:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
