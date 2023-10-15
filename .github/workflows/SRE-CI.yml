@@ -1,4 +1,4 @@
-name: SREChallenge-CI
+name: DocumentKeeper-CI
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
 
 env:
   SERVER: dummy-pdf-or-png
-  PROJECT_ID: documentkeeper-04
-  SERVICE: documentkeeper 
-  REGION: europe-southwest1	
+  PROJECT_ID: sre-documentkeeper
+  SERVICE: sre-documentkeeper 
+  REGION: europe-central2
   REPOSITORY: images
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
       id: auth
       uses: 'google-github-actions/auth@v0'
       with:
-        credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+        credentials_json: '${{ secrets.DOCUMENTKEEPER_SRE_SECRET }}'
 
     # Authenticate Docker to Google Cloud Artifact Registry
     - name: Docker Auth
@@ -62,7 +62,7 @@ jobs:
       uses: 'docker/login-action@v1'
       with:
         username: _json_key
-        password: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+        password: '${{ secrets.DOCUMENTKEEPER_SRE_SECRET }}'
         registry: '${{ env.REGION }}-docker.pkg.dev'
 
     - name: Build and Push Container DocumentKeeper

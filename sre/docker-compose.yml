@@ -1,0 +1,18 @@
+version: "3.4"
+services:
+  dummypdforpng:
+    image: "dummypdforpng${TAG}"
+    container_name: 
+    build: 
+      context: .
+      dockerfile: 
+    ports: "3000:3000"
+  documentkeeper:
+    image: "documentkeeper${TAG}"
+    container_name: 
+    build: 
+      context: .
+      dockerfile: 
+    depends_on:
+      - dummypdforpng
+    ports: "4096:4096"

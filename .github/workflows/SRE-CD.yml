@@ -1,13 +1,13 @@
-name: SREChallenge-CD
+name: DocumentKeeper-CD
 
 on:
   push:
     branches: [ "master" ]
 
 env:
-  PROJECT_ID: documentkeeper-04
-  CLUSTER_NAME: documentkeepersre
-  GKE_REGION: europe-central2-a
+  PROJECT_ID: sre-documentkeeper
+  CLUSTER_NAME: sre-documentkeeper-gke
+  GKE_REGION: europe-central2
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
-          credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY }}'
+          credentials_json: '${{ secrets.DOCUMENTKEEPER_SRE_SECRET }}'
     
       - uses: simenandre/setup-gke-gcloud-auth-plugin@v1
 
