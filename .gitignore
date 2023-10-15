@@ -2,3 +2,4 @@ sre/DocumentKeeper/infrastructure/terraform.tfstate
 sre/DocumentKeeper/infrastructure/terraform.tfstate.backup
 sre/DocumentKeeper/infrastructure/.terraform/providers/registry.terraform.io/hashicorp/google/4.74.0/windows_amd64/terraform-provider-google_v4.74.0_x5.exe
 sre/DocumentKeeper/infrastructure/.terraform.lock.hcl
+sre/DocumentKeeper/infrastructure/.terraform.tfstate.lock.info
