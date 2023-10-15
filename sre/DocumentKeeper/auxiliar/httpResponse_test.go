@@ -1,31 +1,38 @@
 package auxiliar
 
 import (
-	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConfigureHttpResponse_WhenNonEmptyMsg_ReturnsCorrectResponse(t *testing.T) {
-	response := httptest.NewRecorder()
-	statusCode := http.StatusOK
-	msg := "Test was a success"
-
-	ConfigureHttpResponse(response, statusCode, msg)
-
-	assert.Equal(t, statusCode, response.Result().StatusCode)
-	assert.Equal(t, "{\"message\":\"Test was a success\"}", response.Body.String())
+type Requests struct {
+	Message         string
+	StatusCode      int
+	ExpectedMessage string
 }
 
-func TestConfigureHttpResponse_WhenEmptyMsg_ReturnsCorrectResponse(t *testing.T) {
-	response := httptest.NewRecorder()
-	statusCode := http.StatusOK
-	msg := ""
+func TestConfigureHttpResponse_WhenMsgReceived_ReturnsCorrectResponse(t *testing.T) {
+	requests := make([]Requests, 2)
+	requests[0] = Requests{
+		"Test was a success",
+		200,
+		"{\"message\":\"Test was a success\"}",
+	}
 
-	ConfigureHttpResponse(response, statusCode, msg)
+	requests[1] = Requests{
+		"",
+		200,
+		"OK",
+	}
 
-	assert.Equal(t, statusCode, response.Result().StatusCode)
-	assert.Equal(t, "OK", response.Body.String())
+	for _, request := range requests {
+		response := httptest.NewRecorder()
+
+		ConfigureHttpResponse(response, request.StatusCode, request.Message)
+
+		assert.Equal(t, request.StatusCode, response.Result().StatusCode)
+		assert.Equal(t, request.ExpectedMessage, response.Body.String())
+	}
 }
