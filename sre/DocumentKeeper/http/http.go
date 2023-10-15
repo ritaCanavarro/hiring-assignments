@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -19,11 +20,12 @@ import (
 
 // -------------------- Functions -----------------------
 
-// NewHttpServer will starts an HTTP Server
+// NewHttpServer will start an HTTP Server
 // which accepts requests in the following handlers:
 // /metrics - So Prometheus can scrape this application metrics
 // /-/health - For the liveliness probing
 // /-/ready - For the readiness probing
+// /ping - For Blackbox probing
 // /document/{id} - For the user to retrieve a random document
 func NewHttpServer(port int) (*http.Server, error) {
 	router := mux.NewRouter()
@@ -78,5 +80,6 @@ func StartDocumentFetcher() {
 
 	if err := httpServer.ListenAndServe(); err != nil {
 		logrus.Errorf("http server error %v", err)
+		httpServer.Shutdown(context.Background())
 	}
 }

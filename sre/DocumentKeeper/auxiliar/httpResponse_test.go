@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConfigureHttpResponse_WhenNonEmptyMsg_ReturnsCorrestResponse(t *testing.T) {
+func TestConfigureHttpResponse_WhenNonEmptyMsg_ReturnsCorrectResponse(t *testing.T) {
 	response := httptest.NewRecorder()
 	statusCode := http.StatusOK
 	msg := "Test was a success"
@@ -19,7 +19,7 @@ func TestConfigureHttpResponse_WhenNonEmptyMsg_ReturnsCorrestResponse(t *testing
 	assert.Equal(t, "{\"message\":\"Test was a success\"}", response.Body.String())
 }
 
-func TestConfigureHttpResponse_WhenEmptyMsg_ReturnsCorrestResponse(t *testing.T) {
+func TestConfigureHttpResponse_WhenEmptyMsg_ReturnsCorrectResponse(t *testing.T) {
 	response := httptest.NewRecorder()
 	statusCode := http.StatusOK
 	msg := ""

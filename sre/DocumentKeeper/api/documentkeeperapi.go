@@ -16,26 +16,26 @@ import (
 
 // -------------------- Metrics -----------------------
 
-var sucessCountDocumentFetcher = promauto.NewCounter(
+var sucessCountDocumentKeeper = promauto.NewCounter(
 	prometheus.CounterOpts{
 		Namespace: "documentKeeper",
-		Name:      "document_fetcher_documents_success_total",
+		Name:      "document_keeper_documents_success_total",
 		Help:      "Total number of documents served successfully.",
 	},
 )
 
-var corruptedCountDocumentFetcher = promauto.NewCounter(
+var corruptedCountDocumentKeeper = promauto.NewCounter(
 	prometheus.CounterOpts{
 		Namespace: "documentKeeper",
-		Name:      "document_fetcher_documents_corrupted_total",
+		Name:      "document_keeper_documents_corrupted_total",
 		Help:      "Total number of documents that were corrupted.",
 	},
 )
 
-var errorCountDocumentFetcher = promauto.NewCounter(
+var errorCountDocumentKeeper = promauto.NewCounter(
 	prometheus.CounterOpts{
 		Namespace: "documentKeeper",
-		Name:      "document_fetcher_documents_error_total",
+		Name:      "document_keeper_documents_error_total",
 		Help:      "Total number of documents that weren't served due to errors.",
 	},
 )
@@ -84,7 +84,7 @@ func validateContentType(mimeType string, rw http.ResponseWriter) bool {
 // and a Response writer and sends an HTTP response back
 // to the user. Additionally, also increases the error metric counter.
 func sendErrorMessage(errorMsg string, statusCode int, rw http.ResponseWriter) {
-	errorCountDocumentFetcher.Inc()
+	errorCountDocumentKeeper.Inc()
 
 	logrus.Errorf(errorMsg)
 	auxiliar.ConfigureHttpResponse(rw, statusCode, errorMsg)
@@ -121,7 +121,7 @@ func fetchDocument(rw http.ResponseWriter, id int, requestURL string) (string, b
 	err = os.WriteFile(filename, body, 0644)
 
 	if err != nil {
-		corruptedCountDocumentFetcher.Inc()
+		corruptedCountDocumentKeeper.Inc()
 		msg := "Api served a corrupted document."
 
 		logrus.Errorf(msg)
@@ -134,7 +134,8 @@ func fetchDocument(rw http.ResponseWriter, id int, requestURL string) (string, b
 
 // -------------------- Functions -----------------------
 
-// GetDocument
+// GetDocument processes the request of a Document by a user
+// and will serve him back either a PDF or a PNG
 func GetDocument(rw http.ResponseWriter, r *http.Request) {
 	id := processIdentifier(r.URL.Path)
 	if id == -1 {
@@ -156,5 +157,5 @@ func GetDocument(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	http.ServeFile(rw, r, filename)
-	sucessCountDocumentFetcher.Inc()
+	sucessCountDocumentKeeper.Inc()
 }
