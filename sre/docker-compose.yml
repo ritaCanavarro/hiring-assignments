@@ -1,18 +1,20 @@
 version: "3.4"
 services:
   dummypdforpng:
-    image: "dummypdforpng${TAG}"
-    container_name: 
+    image: "dummypdforpng:latest"
     build: 
-      context: .
-      dockerfile: 
-    ports: "3000:3000"
+      context: ./dummy-pdf-or-png
+    ports: 
+      - "3000:3000"
   documentkeeper:
-    image: "documentkeeper${TAG}"
-    container_name: 
+    image: "documentkeeper:latest"
     build: 
-      context: .
-      dockerfile: 
+      context: ./DocumentKeeper
     depends_on:
       - dummypdforpng
-    ports: "4096:4096"
+    ports: 
+      - "4096:4096"
+    environment:
+      - externalDNS=dummypdforpng
+      - externalPort=3000
+      - internalPort=4096
