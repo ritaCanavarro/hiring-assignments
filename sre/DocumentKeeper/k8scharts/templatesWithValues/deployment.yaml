@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: documentkeeper
-        image: eu.gcr.io/sre-documentkeeper/sre-documentkeeper:latest
+        image: europe-central2-docker.pkg.dev/sre-documentkeeper/images/sre-documentkeeper:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
